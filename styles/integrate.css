@@ -1,0 +1,8 @@
+/* Кастомные курсоры */
+html, body {
+    cursor: url("file://__dirname__/media/default4x.png"), auto !important;
+}
+
+button, input[type="submit"], input[type="button"], a, .btn {
+    cursor: url("file://__dirname__/media/pointer4x.png"), pointer !important;
+}
