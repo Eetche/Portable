@@ -93,7 +93,6 @@ app.on("window-all-closed", () => {
 
 
 app.on('web-contents-created', (event, contents) => {
-	if (contents.getType() !== 'webview') return;
 
 	contents.on('context-menu', (e, params) => {
 		const win = BrowserWindow.fromWebContents(contents) || BrowserWindow.getFocusedWindow();

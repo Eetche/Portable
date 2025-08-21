@@ -12,6 +12,7 @@ function showHome() {
 	content.classList.remove('active');
 	if (apps) apps.style.display = '';
     addressInput.value = '';
+	webviewS.src = ""
 }
 
 function showContent() {
@@ -34,7 +35,7 @@ function normalizeToUrl(text) {
 function navigate(raw) {
 	const url = normalizeToUrl(raw);
 	if (!url) return;
-	webview.src = url;
+	webviewS.src = url;
 	showContent();
 }
 
@@ -46,24 +47,24 @@ addressInput.addEventListener('keydown', (e) => {
 });
 
 backBtn.addEventListener('click', () => {
-	if (webview.canGoBack()) webview.goBack();
+	if (webviewS.canGoBack()) webview.goBack();
 });
 forwardBtn.addEventListener('click', () => {
-	if (webview.canGoForward()) webview.goForward();
+	if (webviewS.canGoForward()) webview.goForward();
 });
 reloadBtn.addEventListener('click', () => {
-	webview.reload();
+	webviewS.reload();
 });
 homeBtn.addEventListener('click', () => {
 	showHome();
 });
 
-webview.addEventListener('did-navigate', (e) => {
+webviewS.addEventListener('did-navigate', (e) => {
 	addressInput.value = e.url || '';
 });
-webview.addEventListener('did-navigate-in-page', (e) => {
+webviewS.addEventListener('did-navigate-in-page', (e) => {
 	addressInput.value = e.url || '';
 });
-webview.addEventListener('will-navigate', (e) => {
+webviewS.addEventListener('will-navigate', (e) => {
 	addressInput.value = e.url || '';
 });

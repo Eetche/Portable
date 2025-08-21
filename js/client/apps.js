@@ -12,13 +12,17 @@ function showContent() {
 websites.forEach((website) => {
 	website.addEventListener("click", (e) => {
 		e.preventDefault();
-		switch (website.id) {
-			case "youtube":
-				showContent();
-				webview.src = "https://www.youtube.com";
-				break;
-			default:
-				break;
+		try {
+			switch (website.id) {
+				case "youtube":
+					showContent();
+					webview.src = "https://www.youtube.com";
+					break;
+				default:
+					break;
+			}
+		} catch (error) {
+			console.error("website switch error")
 		}
 	});
 });
