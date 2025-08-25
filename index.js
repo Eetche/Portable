@@ -7,6 +7,7 @@ import { spawn } from 'child_process'
 
 import Window from './js/window.js'
 import launchGame from './js/steam.js'
+import { writeTabs } from './js/json.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -18,6 +19,8 @@ const __dirname = path.dirname(__filename)
 //     stdio: 'ignore'
 // }).unref()
 const injectedCSSKeys = new Map()
+
+writeTabs("hello")
 
 // Обработчик для внедрения CSS через preload
 ipcMain.handle("inject-css", async (event) => {
@@ -32,7 +35,7 @@ ipcMain.handle("inject-css", async (event) => {
             html, body, span, input[type="text"] {
                 cursor: url("file:///${defaultCursorPath.replace(/\\/g, '/')}"), auto !important;
             }
-                        
+
             button, input[type="submit"], input[type="button"], a, .btn, [role="button"], a:-webkit-any-link, div[role="slider"] {
                 cursor: url("file:///${pointerCursorPath.replace(/\\/g, '/')}"), pointer !important;
             }
@@ -79,7 +82,7 @@ ipcMain.handle("open-steam-app", (event, id) => {
         launchGame(id)
         console.log("open-steam-app is nice")
     } catch (error) {
-        console.error("open-steam-app error")   
+        console.error("open-steam-app error")
     }
 })
 

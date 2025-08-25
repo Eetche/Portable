@@ -4,7 +4,7 @@ const newtabButton = document.querySelector(".newtab")
 
 const webviewTabs = document.getElementById("webview")
 
-function showContent() {
+function showContentTabs() {
 	contentTabs.classList.add('active');
 }
 
@@ -12,7 +12,7 @@ class Tab {
     constructor(title, id) {
         this.title = title
         this.id = id
-        this.src = "https://www.youtube.com"
+        this.src = "https://www.google.com"
     }
 }
 
@@ -20,21 +20,45 @@ class Tabs {
     constructor() {
         this.tabs = []
         this.count = 0
+        this.activeTabId = null
+
+        this.setupWebviewListeners()
     }
-    
+
+    setupWebviewListeners() {
+        // webviewTabs.addEventListener("did-finish-load")
+
+        webviewTabs.addEventListener("page-title-updated", (event) => {
+
+            const tabEl = document.getElementById(this.activeTabId)
+
+            if (tabEl) {
+                tabEl.textContent = event.title
+            }
+        })
+
+        webviewTabs.addEventListener('did-navigate', (event) => {
+            this.tabs.forEach((tab) => {
+                if (tab.id == this.activeTabId) {
+                    tab.src = event.url
+                }
+            })
+        })
+    }
+
     newtab() {
-        
-        const newtabCl = new Tab("New tab", this.count)
-        
+
+        const id = this.count
+        const newtabCl = new Tab("New tab", id)
+
         this.count += 1;
-        
+
         this.tabs.push(newtabCl)
         const tab = document.createElement('div')
-        
-        
-        tab.className = "tab"
-        
-        tab.id = this.count;
+
+        tab.classList.add("tab")
+
+        tab.id = id;
 
         tab.textContent = "New tab"
 
@@ -45,18 +69,16 @@ class Tabs {
         tabsDiv.append(tab)
 
     }
-    
-    closetab(index) {
-        this.tabs.splice(index - 1, 1) // delete only index's tab
-    }
-    
-    refreshTabs() {
-        
+
+    closetab(id) {
+        this.tabs.splice(id - 1, 1) // delete only index's tab
     }
 
-    gotoTab(index) {
-        webviewTabs.src = this.tabs[index].src
-        showContent()
+    gotoTab(id) {
+        this.activeTabId = id
+        webviewTabs.src = this.tabs[id].src
+        contentTabs.classList.add('active')
+        showContentTabs()
     }
 }
 

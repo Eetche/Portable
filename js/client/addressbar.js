@@ -15,7 +15,7 @@ function showHome() {
 	webviewS.src = ""
 }
 
-function showContent() {
+function showContentAddress() {
 	content.classList.add('active');
 	if (apps) apps.style.display = 'none';
 }
@@ -47,16 +47,16 @@ addressInput.addEventListener('keydown', (e) => {
 });
 
 backBtn.addEventListener('click', () => {
-	if (webviewS.canGoBack()) webview.goBack();
+	if (webviewS.navigationHistory.canGoBack()) webviewS.goBack();
 });
 forwardBtn.addEventListener('click', () => {
-	if (webviewS.canGoForward()) webview.goForward();
+	if (webviewS.navigationHistory.canGoForward()) webviewS.goForward();
 });
 reloadBtn.addEventListener('click', () => {
 	webviewS.reload();
 });
 homeBtn.addEventListener('click', () => {
-	showHome();
+	showHome()
 });
 
 webviewS.addEventListener('did-navigate', (e) => {

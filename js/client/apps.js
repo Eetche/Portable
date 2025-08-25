@@ -1,11 +1,11 @@
 const games = document.querySelectorAll(".games .app");
 const websites = document.querySelectorAll(".websites .app");
 const webview = document.getElementById("webview");
-const contentAPPS = document.getElementById("content");
+const contentApps = document.getElementById("content");
 const appsBlock = document.querySelector(".apps");
 
-function showContent() {
-	content.classList.add("active");
+function showContentApps() {
+	contentApps.classList.add("active");
 	if (appsBlock) appsBlock.style.display = "none";
 }
 
@@ -15,7 +15,7 @@ websites.forEach((website) => {
 		try {
 			switch (website.id) {
 				case "youtube":
-					showContent();
+					showContentApps();
 					webview.src = "https://www.youtube.com";
 					break;
 				default:
