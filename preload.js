@@ -1,12 +1,17 @@
-const { contextBridge, ipcRenderer } = require('electron')
+import {contextBridge, ipcRenderer} from 'electron'
+
+import {writeTabs} from './js/json.js'
 
 contextBridge.exposeInMainWorld("electronAPI", {
     loadUrl: (url) => ipcRenderer.send("load-url", url),
-    injectCSS: () => ipcRenderer.invoke("inject-css"),
-    removeCSS: (key) => ipcRenderer.invoke("remove-css", key),
+
+    // removeCSS: (key) => ipcRenderer.invoke("remove-css", key),
+
     openWebsite: (url) => ipcRenderer.invoke("open-website", url),
-    openSteamApp: (id) => ipcRenderer.invoke("open-steam-app", id)
-    
+    openSteamApp: (id) => ipcRenderer.invoke("open-steam-app", id),
+
+    writeTabs: (data) => writeTabs(data),
+
 })
 
 ipcRenderer.invoke("inject-css")

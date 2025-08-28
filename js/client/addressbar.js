@@ -47,10 +47,10 @@ addressInput.addEventListener('keydown', (e) => {
 });
 
 backBtn.addEventListener('click', () => {
-	if (webviewS.navigationHistory.canGoBack()) webviewS.goBack();
+	if (webviewS.canGoBack()) webviewS.goBack();
 });
 forwardBtn.addEventListener('click', () => {
-	if (webviewS.navigationHistory.canGoForward()) webviewS.goForward();
+	if (webviewS.canGoForward()) webviewS.goForward();
 });
 reloadBtn.addEventListener('click', () => {
 	webviewS.reload();

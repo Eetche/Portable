@@ -15,12 +15,15 @@ websites.forEach((website) => {
 		try {
 			switch (website.id) {
 				case "youtube":
-					showContentApps();
-					webview.src = "https://www.youtube.com";
-					break;
+				webview.src = "https://www.youtube.com";
+				break;
+				case "twitch":
+				webview.src = "https://www.twitch.tv";
+				break;
 				default:
-					break;
+				break;
 			}
+			showContentApps();
 		} catch (error) {
 			console.error("website switch error")
 		}

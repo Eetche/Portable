@@ -1,1 +1,8 @@
-{"tabs":"hello"}
+{
+  "tabs": {
+    "new tab": {
+      "id": 1,
+      "src": "https://www.google.com"
+    }
+  }
+}

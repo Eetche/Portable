@@ -4,7 +4,7 @@ html, body {
     margin: 0;
     overflow-x: hidden;
     overflow-y: hidden;
-    padding-top: 70px;
+    padding-top: 110px;
     background-color: rgb(30,30,30);
 }
 
@@ -126,7 +126,7 @@ html, body {
     cursor: url("file:///media/default4x.png");
 	position: absolute;
 	left: 0;
-	top: 70px;
+	top: 110px;
 	width: 100%;
 	bottom: 0;
 	display: none;
@@ -153,20 +153,23 @@ html, body {
     top: 70px;
     left: 0px;
     width: 100%;
-    height: 30px;
+    height: 25px;
     background-color: rgb(55,55,55);
     display: flex;
     align-items: center;
     flex-direction: row;
     flex-wrap: nowrap;
-    padding: 5px;
+    border-bottom: 1px solid rgba(255,255,255, 0.1);
 }
 
 .newtab {
     cursor: pointer;
     font-weight: 900;
-    font-size: 1rem;
+    font-size: 1.2rem;
     color: white;
+    order: 999;
+    padding: 5px;
+    margin-left: 15px;
 }
 
 .tab {
@@ -176,8 +179,31 @@ html, body {
     border-right: 1px solid rgba(255,255,255, 0.1);
     border-left: 1px solid rgba(255,255,255, 0.1);
     display: flex;
-    justify-content: center;
     align-items: center;
     padding-left: 10px;
     padding-right: 10px;
+    font-size: 0.9rem;
+    transition: ease 0.2s;
+    opacity: 0.5;
+}
+
+.tab:hover {
+    opacity: 1;
+}
+
+.tab.active {
+    opacity: 1;
+}
+
+.closeTab {
+    transform: rotate(45deg);
+    font-weight: 900;
+    font-size: 1.5rem;
+    margin-left: 5px;
+    padding: 5px;
+    transition: all 0.1s;
+}
+
+.closeTab:hover {
+    color: rgba(255,255,255, 0.7);
 }
