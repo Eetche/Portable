@@ -44,6 +44,14 @@ class Tabs {
                 }
             })
         })
+
+        webviewTabs.addEventListener('did-navigate-in-page', (event) => {
+            this.tabs.forEach((tab) => {
+                if (tab.id == this.activeTabId) {
+                    tab.src = event.url
+                }
+            })
+        })
     }
 
     newtab() {
@@ -100,6 +108,7 @@ class Tabs {
 
         const tabEl = document.getElementById(id)
         if (tabEl) {
+            webviewTabs.src = "https://www.google.com"
             tabEl.remove()
         }
 
@@ -136,8 +145,6 @@ class Tabs {
 
 
 const tabs = new Tabs()
-
-tabs.newtab()
 
 newtabButton.addEventListener('click', () => {
     tabs.newtab();

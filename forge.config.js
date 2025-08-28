@@ -10,18 +10,21 @@ module.exports = {
     {
       name: '@electron-forge/maker-squirrel',
       config: {},
+      platforms: ['win32'],
     },
     {
       name: '@electron-forge/maker-zip',
-      platforms: ['darwin'],
+      platforms: ['darwin', 'win32', 'linux'],
     },
     {
       name: '@electron-forge/maker-deb',
       config: {},
+      platforms: ['linux'],
     },
     {
       name: '@electron-forge/maker-rpm',
       config: {},
+      platforms: ['linux'],
     },
   ],
   plugins: [
@@ -29,8 +32,7 @@ module.exports = {
       name: '@electron-forge/plugin-auto-unpack-natives',
       config: {},
     },
-    // Fuses are used to enable/disable various Electron functionality
-    // at package time, before code signing the application
+
     new FusesPlugin({
       version: FuseVersion.V1,
       [FuseV1Options.RunAsNode]: false,
