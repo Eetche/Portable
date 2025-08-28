@@ -14,4 +14,4 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
 })
 
-ipcRenderer.invoke("inject-css")
+// ipcRenderer.invoke("inject-css")

@@ -2,7 +2,7 @@ import { app, ipcMain, BrowserWindow, shell, Menu } from 'electron'
 
 import Window from './js/window.js'
 import launchGame from './js/steam.js'
-import "./js/injectCSS.js"
+// import "./js/injectCSS.js" disconnect css injecting
 
 ipcMain.handle("open-steam-app", (event, id) => {
     try {
@@ -28,8 +28,8 @@ app.on('web-contents-created', (event, contents) => {
 		const hasText = !!(params.selectionText && params.selectionText.trim().length);
 
 		const template = [
-			{ label: 'Назад', enabled: contents.navigationHistory.canGoBack(), click: () => contents.goBack() },
-			{ label: 'Вперёд', enabled: contents.navigationHistory.canGoForward(), click: () => contents.goForward() },
+			{ label: 'Назад', enabled: contents.navigationHistory.canGoBack(), click: () => contents.navigationHistory.goBack() },
+			{ label: 'Вперёд', enabled: contents.navigationHistory.canGoForward(), click: () => contents.navigationHistory.goForward() },
 			{ type: 'separator' },
 			{ role: 'cut', enabled: params.editFlags.canCut },
 			{ role: 'copy', enabled: hasText },
