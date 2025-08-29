@@ -9,20 +9,61 @@ function showContentTabs() {
 }
 
 class Tab {
-    constructor(title, id) {
+    constructor(title, id, src) {
         this.title = title
         this.id = id
-        this.src = "https://www.google.com"
+        this.src = src
     }
 }
 
 class Tabs {
     constructor() {
         this.tabs = []
+        this.cacheTabs = []
+
         this.count = 0
         this.activeTabId = null
 
         this.setupWebviewListeners()
+
+        this.restoreTempTabs()
+
+    }
+
+    createTab(title, id) {
+        const tab = document.createElement('div')
+
+        const closeTab = document.createElement('span')
+
+        closeTab.textContent = "+"
+        closeTab.classList.add("closeTab")
+
+        tab.classList.add("tab")
+
+        tab.id = id;
+
+        tab.addEventListener('click', () => this.gotoTab(id))
+        closeTab.addEventListener('click', () => this.closetab(id))
+
+        tabsDiv.append(tab)
+
+        const tabTitle = document.createElement('span')
+        tabTitle.classList.add('tabTitle')
+        tabTitle.textContent = title
+
+        tab.appendChild(tabTitle)
+        tab.appendChild(closeTab)
+
+    }
+
+    async restoreTempTabs() {
+        const tabsData = await window.electronAPI.getTempTabs()
+
+        this.tabs = tabsData.tabs
+
+        tabsData.tabs.forEach((tab) => {
+            this.createTab(tab.title, tab.id)
+        })
     }
 
     setupWebviewListeners() {
@@ -31,18 +72,30 @@ class Tabs {
 
             const tabEl = document.getElementById(this.activeTabId)
 
+            this.tabs.forEach((tab) => {
+                if (tab.id == this.activeTabId) {
+                    tab.title = event.title
+                }
+            })
+
+
             if (tabEl) {
                 tabEl.querySelector('span').textContent = event.title
             }
 
+            window.electronAPI.writeTabs(this.tabs)
+
         })
 
-        webviewTabs.addEventListener('did-navigate', (event) => {
+        webviewTabs.addEventListener('did-navigate', async (event) => {
+
             this.tabs.forEach((tab) => {
                 if (tab.id == this.activeTabId) {
                     tab.src = event.url
                 }
             })
+
+            window.electronAPI.writeTabs(this.tabs)
         })
 
         webviewTabs.addEventListener('did-navigate-in-page', (event) => {
@@ -51,15 +104,20 @@ class Tabs {
                     tab.src = event.url
                 }
             })
+
+            window.electronAPI.writeTabs(this.tabs)
         })
     }
 
     newtab() {
 
+
         const id = this.count
-        const newtabCl = new Tab("New tab", id)
+        const newtabCl = new Tab("New tab", id, "https://www.google.com")
 
         this.count += 1;
+
+        console.log(this.tabs)
 
         this.tabs.push(newtabCl)
         const tab = document.createElement('div')
@@ -89,8 +147,22 @@ class Tabs {
 
         if (this.activeTabId) {
             const prevTab = document.getElementById(this.activeTabId)
-            prevTab.classList.remove('active')
+            if (prevTab) {
+                prevTab.classList.remove('active')
+            }
         }
+
+        function getThisTabObject() {
+            return {id: newtabCl.id, src: newtabCl.src, title: newtabCl.title}
+        }
+
+        // caching tabs
+
+        console.log(this.tabs)
+
+        window.electronAPI.writeTabs(this.tabs)
+
+        //
 
 
         this.activeTabId = newtabCl.id
@@ -104,6 +176,7 @@ class Tabs {
 
         if (tabIndex !== -1) {
             this.tabs.splice(tabIndex, 1)
+            window.electronAPI.writeTabs(this.tabs)
         }
 
         const tabEl = document.getElementById(id)
@@ -120,6 +193,11 @@ class Tabs {
 
     gotoTab(id) {
         const tab = this.tabs.find(tab => tab.id === id)
+
+        if (!tab) {
+            console.error(`tab with id: ${id} is not defined`)
+            return
+        }
 
 
         this.activeTabId = id

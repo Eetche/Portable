@@ -16,8 +16,6 @@ function writeTabs(tabs) {
 
         const strData = JSON.stringify(parsed, null, 2)
 
-        console.log(strData)
-
         fs.writeFile(tempPath, strData, 'utf-8', (err) => {
             if (err) {
                 console.log("writeTabs writeFile error: " + err)

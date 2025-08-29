@@ -29,3 +29,20 @@ websites.forEach((website) => {
 		}
 	});
 });
+
+games.forEach((game) => {
+	game.addEventListener('click', () => {
+		try {
+			switch (game.id) {
+				case "dota2":
+					window.electronAPI.openSteamApp(570)
+					break;
+
+				default:
+					break;
+			}
+		} catch (err) {
+			console.error("error in games switch: " + err)
+		}
+	})
+})

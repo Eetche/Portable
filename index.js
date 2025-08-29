@@ -2,6 +2,9 @@ import { app, ipcMain, BrowserWindow, shell, Menu } from 'electron'
 
 import Window from './js/window.js'
 import launchGame from './js/steam.js'
+import { writeTabs }from "./js/json.js"
+
+import fs from "fs"
 // import "./js/injectCSS.js" disconnect css injecting
 
 ipcMain.handle("open-steam-app", (event, id) => {
@@ -9,8 +12,23 @@ ipcMain.handle("open-steam-app", (event, id) => {
         launchGame(id)
         console.log("open-steam-app is nice")
     } catch (error) {
-        console.error("open-steam-app error")
+        console.error("open-steam-app error: " + error)
     }
+})
+
+ipcMain.handle("write-tabs", (event, data) => {
+	writeTabs(data)
+})
+
+ipcMain.handle("get-temp-tabs", async (event) => {
+	try {
+		const data = await fs.promises.readFile("./data/temp.json", 'utf8')
+		const tabsObj = JSON.parse(data)
+		return tabsObj
+	} catch (error) {
+		console.error("get-temp-tabs handle error: " + error)
+		return { tabs: [] }
+	}
 })
 
 app.whenReady().then(() => {
