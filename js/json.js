@@ -1,28 +1,30 @@
 import fs from "fs"
 import path from "path"
 
-const tempPath = path.join(import.meta.dirname, "..", "data", "temp.json")
+const tempPath = path.resolve(import.meta.dirname, "..", "data", "temp.json")
 
-function writeTabs(tabs) {
+console.log("json.js: " + tempPath)
 
-    fs.readFile(tempPath, 'utf-8', (err, data) => {
-        if (err) {
-            console.log("writeTabs readFile error: " + err)
-        }
+let isWriting = false
 
+async function writeTabs(tabs) {
+    while (isWriting) {
+        await new Promise(resolve => setTimeout(resolve, 10))
+    }
+
+    isWriting = true
+
+    try {
+        const data = await fs.promises.readFile(tempPath, 'utf8')
         const parsed = JSON.parse(data)
-
         parsed.tabs = tabs
-
         const strData = JSON.stringify(parsed, null, 2)
-
-        fs.writeFile(tempPath, strData, 'utf-8', (err) => {
-            if (err) {
-                console.log("writeTabs writeFile error: " + err)
-            }
-        })
-    })
-
+        await fs.promises.writeFile(tempPath, strData, 'utf8')
+    } catch (error) {
+        console.log("writeTabs error: " + error)
+    } finally {
+        isWriting = false
+    }
 }
 
 export {writeTabs}
