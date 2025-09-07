@@ -44,39 +44,6 @@ html, body {
     transform: scale(-70%, 70%);
 }
 
-.apps {
-    width: 100%;
-    height: auto;
-    padding: 5px;
-    margin-top: 10rem;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-around;
-
-}
-
-.app {
-    cursor: pointer;
-    border-radius: 10px;
-    transition: all 0.15s ease;
-    background-color: rgb(35, 35, 35);
-    padding: 10px;
-    display: flex;
-}
-
-.app:hover {
-    background-color: rgb(40,40,40);
-}
-
-.app img {
-    width: 32px;
-    height: 32px;
-}
-
-.apps .websites, .games {
-    display: grid;
-}
-
 .topbar {
 	position: fixed;
 	left: 0;
@@ -143,9 +110,7 @@ html, body {
 	background: #000;
 }
 
-/* немного уменьшим отступы, чтобы учесть топбар */
 .search { margin-top: 20px; }
-.apps { margin-top: 2rem; }
 
 .tabs {
     z-index: 1001;
@@ -206,4 +171,24 @@ html, body {
 
 .closeTab:hover {
     color: rgba(255,255,255, 0.7);
+}
+
+.newgameButton, .newwebsiteButton {
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 48px;
+    height: 48px;
+    padding: 10px;
+    order: 999;
+}
+
+.newgameButton svg, .newwebsiteButton svg {
+    transform:scale(1.4);
+    transition: all 0.1s;
+}
+
+.newgameButton svg:hover, .newwebsiteButton svg:hover {
+    transform: scale(1.5);
 }

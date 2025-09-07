@@ -1,4 +1,4 @@
-import { Menu, BrowserWindow, app, shell } from "electron"
+import { BrowserWindow } from "electron"
 import path from "path"
 import { fileURLToPath } from "url"
 
@@ -10,9 +10,10 @@ class Window {
     static createWindow() {
         const window = new BrowserWindow(
             {
-                width: 1000,
+                width: 1200,
                 height: 800,
                 icon: path.join(__dirname, "..", "assets", "icon.ico"),
+                title: "Portable",
                 webPreferences: {
                     preload: path.join(__dirname, "..", "preload.js"),
                     webSecurity: false,

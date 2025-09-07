@@ -11,3 +11,9 @@ export default function launchGame(appId, args = []) {
 
     game.unref();
 }
+
+export async function getGameIcon(appId) {
+    const response = await fetch(`https://store.steampowered.com/api/appdetails/?appid=${appId}&cc=ru&filters=basic`);
+    const data = await response.json();
+    return data;
+}

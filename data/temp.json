@@ -1,3 +1,14 @@
 {
-  "tabs": []
+  "tabs": [
+    {
+      "title": "Google",
+      "id": 0,
+      "src": "https://www.google.com/"
+    },
+    {
+      "title": "YouTube",
+      "id": 1,
+      "src": "https://www.youtube.com/"
+    }
+  ]
 }

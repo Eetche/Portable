@@ -1,0 +1,96 @@
+
+.apps {
+    width: 100%;
+    height: auto;
+    padding: 5px;
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+
+}
+
+.app {
+    cursor: pointer;
+    border-radius: 10px;
+    transition: all 0.15s ease;
+    background-color: rgb(35, 35, 35);
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    width: 48px;
+    height: 48px;
+}
+
+.app:hover {
+    background-color: rgb(40,40,40);
+}
+
+.app img {
+    width: 48px;
+    height: 48px;
+}
+
+.apps .websites, .games {
+    display: grid;
+    gap: 20px;
+    grid-template-columns: repeat(2, 40%);
+}
+
+.createApp {
+    z-index: 1003;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 60%;
+    height: 50%;
+    background-color: rgba(0,0,0,0.95);
+    z-index: 1002;
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.createApp input {
+    width: 40%;
+    padding: 10px;
+    outline: none;
+    font-size: 0.9rem;
+}
+
+.createApp input[type="file"] {
+    width: 40%;
+    padding: 10px;
+}
+
+.createApp button {
+    cursor: pointer;
+    margin-top: 100px;
+    width: 40%;
+    padding: 10px;
+
+    border: none;
+}
+
+
+.createApp svg {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    transition: all 0.2s;
+    border-radius: 50%;
+    padding: 5px;
+}
+
+.createApp svg:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+}
