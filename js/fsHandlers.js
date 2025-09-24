@@ -1,4 +1,4 @@
-import { ipcMain, dialog } from "electron";
+import { ipcMain, dialog, app } from "electron";
 import { spawn } from "child_process"
 
 ipcMain.handle("get-dialog-path", async () => {
@@ -9,8 +9,13 @@ ipcMain.handle("get-dialog-path", async () => {
     if (!res.canceled) {
         const fpath = res.filePaths[0]
 
+        const icon = await app.getFileIcon(fpath, {size: 'large'})
 
-        return fpath
+
+        return {
+            path: fpath,
+            icon: "data:image/png;base64," + icon.toPNG().toString('base64')
+        }
     }
 })
 

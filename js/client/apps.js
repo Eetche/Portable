@@ -47,8 +47,12 @@ class Apps {
 		const response = await window.electronAPI.getApps()
 		this.apps = response.apps
 
+		console.log
+
+
 		this.apps.forEach((app) => {
-			this.newgame(app.title, "")
+			console.log(app.icon)
+			this.newgame(app.title, app.icon)
 		})
 	}
 
@@ -63,6 +67,8 @@ class Apps {
 
 			const imgBlock = document.createElement('img')
 			imgBlock.src = iconSrc
+
+			console.log(iconSrc)
 
 
 			let executeF = ""
@@ -79,7 +85,9 @@ class Apps {
 			})
 
 
+
 			gamesBlock.appendChild(appBlock)
+			appBlock.appendChild(imgBlock)
 	}
 }
 
@@ -99,7 +107,8 @@ createAppBtn.addEventListener("click", async () => {
 
 			const newApp = {
 				title: createAppInput.value,
-				execute: res
+				execute: res.path,
+				icon: res.icon
 			}
 
 			console.log(appsObj)
@@ -108,7 +117,7 @@ createAppBtn.addEventListener("click", async () => {
 
 			window.electronAPI.writeApps(appsObj.apps);
 
-			appsObj.newgame(newApp.title, "")
+			appsObj.newgame(newApp.title, res.icon)
 	}
 
 
