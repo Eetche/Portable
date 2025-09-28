@@ -94,3 +94,9 @@
 .createApp svg:hover {
     background-color: rgba(255, 255, 255, 0.2);
 }
+
+
+.delete-app {
+    z-index: 3;
+    cursor: pointer;
+}
