@@ -15,8 +15,16 @@ contextBridge.exposeInMainWorld("electronAPI", {
     getTempTabs: () => ipcRenderer.invoke("get-temp-tabs"),
 
     writeApps: (data) => ipcRenderer.invoke("write-apps", data),
-    getApps: () => ipcRenderer.invoke("get-apps")
+    getApps: () => ipcRenderer.invoke("get-apps"),
 
+    updateUserTasks: () => ipcRenderer.invoke("update-user-tasks"),
+
+    openSettings: () => ipcRenderer.invoke("open-settings"),
+    closeSettings: () => ipcRenderer.invoke("close-settings"),
+
+    injectCSS: (css) => ipcRenderer.invoke("inject-css", css),
+
+    getCustoms: () => ipcRenderer.invoke("get-customs")
 })
 
-// ipcRenderer.invoke("inject-css")
+ipcRenderer.invoke("restore-customs")

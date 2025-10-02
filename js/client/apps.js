@@ -16,109 +16,98 @@ const createAppInput = document.querySelector(".createAppInput");
 const closeCreateApp = document.querySelector(".createApp svg");
 
 class Apps {
-	constructor() {
-		this.apps = []
-		this.restoreApps()
-	}
+  constructor() {
+    this.apps = [];
+    this.restoreApps();
+  }
 
-	createAppBlock(iconSrc) {
-		const appBlock = document.createElement('div')
-		appBlock.classList.add("app")
+  async restoreApps() {
+    const response = await window.electronAPI.getApps();
+    this.apps = response.apps;
 
-		const appIconBlock = document.createElement('div')
-		appIconBlock.classList.add("app-icon")
+    this.apps.forEach((app) => {
+      this.newgame(app.title, app.icon, app.id, app.execute);
+    });
+  }
 
-		const imgBlock = document.createElement("img")
-		imgBlock.src = iconSrc
+  async deleteApp(appBlock, id) {
+    const response = await window.electronAPI.getApps();
 
-		appIconBlock.appendChild(imgBlock)
-		appBlock.appendChild(appIconBlock)
+    const updatedApps = response.apps.filter((app) => app.id !== id);
+    this.apps = updatedApps;
 
-		gamesBlock.appendChild(appBlock)
-	}
+    await window.electronAPI.writeApps(updatedApps);
+	window.electronAPI.updateUserTasks()
+    if (gamesBlock.contains(appBlock)) {
+      appBlock.style.opacity = 0;
 
-	async restoreApps() {
-		const response = await window.electronAPI.getApps()
-		this.apps = response.apps
+      setTimeout(() => {
+        gamesBlock.removeChild(appBlock);
+      }, 150);
+    }
+  }
 
-		this.apps.forEach((app) => {
-			this.newgame(app.title, app.icon, app.id, app.execute)
-		})
-	}
+  async newgame(title, iconSrc, id, executePath) {
+    const appBlock = document.createElement("div");
+    appBlock.classList.add("app");
 
-	deleteApp(appBlock) {
-		if (gamesBlock.contains(appBlock)) {
-			gamesBlock.removeChild(appBlock)
-		}
-	}
+    const appIconBlock = document.createElement("div");
+    appIconBlock.classList.add("app-icon");
 
-	async newgame(title, iconSrc, id, executePath) {
-		const appBlock = document.createElement('div')
-		appBlock.classList.add("app")
+    const imgBlock = document.createElement("img");
+    imgBlock.src = iconSrc;
 
-		const appIconBlock = document.createElement('div')
-		appIconBlock.classList.add("app-icon")
+    const deleteAppBtn = document.createElement("img");
+    deleteAppBtn.classList.add("delete-app");
+    deleteAppBtn.src = import.meta.dirname + "/../../media/close.svg";
 
-		const imgBlock = document.createElement('img')
-		imgBlock.src = iconSrc
+    deleteAppBtn.addEventListener("click", async () => {
+      this.deleteApp(appBlock, id);
+    });
 
-		const deleteAppBtn = document.createElement('img')
-		deleteAppBtn.classList.add("delete-app")
-		deleteAppBtn.src = import.meta.dirname + "/../../media/close.svg"
+    imgBlock.addEventListener("click", () => {
+      if (executePath) {
+        window.electronAPI.openExecute(executePath);
+      }
+    });
 
-		deleteAppBtn.addEventListener('click', async () => {
-			const response = await window.electronAPI.getApps()
+    appBlock.appendChild(appIconBlock);
+    appBlock.appendChild(imgBlock);
+    appBlock.appendChild(deleteAppBtn);
 
-			const updatedApps = response.apps.filter(app => app.id !== id)
-			this.apps = updatedApps
+    gamesBlock.appendChild(appBlock);
 
-			await window.electronAPI.writeApps(updatedApps)
-
-			this.deleteApp(appBlock)
-		})
-
-		appBlock.addEventListener('click', () => {
-			if (executePath) {
-				window.electronAPI.openExecute(executePath)
-			}
-		})
-
-		appBlock.appendChild(appIconBlock)
-		appBlock.appendChild(imgBlock)
-		appBlock.appendChild(deleteAppBtn)
-
-		gamesBlock.appendChild(appBlock)
-	}
+	window.electronAPI.updateUserTasks()
+  }
 }
 
 const appsObj = new Apps();
 
 createAppBtn.addEventListener("click", async () => {
-	if (createAppInput.value === "") {
-		alert("Please fill in all fields");
-		return;
-	}
+  if (createAppInput.value === "") {
+    alert("Please fill in all fields");
+    return;
+  }
 
-	const res = await window.electronAPI.getDialogPath()
+  const res = await window.electronAPI.getDialogPath();
 
-	if (res) {
-		const newApp = {
-			title: createAppInput.value,
-			execute: res.path,
-			icon: res.icon,
-			id: Date.now()
-		}
+  if (res) {
+    const newApp = {
+      title: createAppInput.value,
+      execute: res.path,
+      icon: res.icon,
+      id: Date.now(),
+    };
 
-		appsObj.apps.push(newApp)
+    appsObj.apps.push(newApp);
 
-		await window.electronAPI.writeApps(appsObj.apps)
+    await window.electronAPI.writeApps(appsObj.apps);
 
-		appsObj.newgame(newApp.title, newApp.icon, newApp.id, newApp.execute)
-	}
+    appsObj.newgame(newApp.title, newApp.icon, newApp.id, newApp.execute);
+  }
 
-	createApp.style.display = "none";
-})
-
+  createApp.style.display = "none";
+});
 
 closeCreateApp.addEventListener("click", () => {
   createApp.style.display = "none";
