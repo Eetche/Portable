@@ -69,12 +69,7 @@ html, body {
 	width: 36px;
 	cursor: pointer;
 	outline: none;
-	transition: background 0.15s ease;
     font-size: 1.1rem;
-}
-
-.topbar button:hover {
-	background: rgb(55,55,55);
 }
 
 .topbar input {

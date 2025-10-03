@@ -1,0 +1,290 @@
+{
+  "drag": {
+    "HoldRequired": false,
+    "Key": "Mouse0",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "delete": {
+    "HoldRequired": false,
+    "Key": "Backspace",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "activateDirect": {
+    "HoldRequired": false,
+    "Key": "F",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "slowmo": {
+    "HoldRequired": false,
+    "Key": "G",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "toggleLimbStatus": {
+    "HoldRequired": false,
+    "Key": "S",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "time": {
+    "HoldRequired": false,
+    "Key": "Space",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "tool1": {
+    "HoldRequired": false,
+    "Key": "Alpha1",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "tool2": {
+    "HoldRequired": false,
+    "Key": "Alpha2",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "tool3": {
+    "HoldRequired": false,
+    "Key": "Alpha3",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "tool4": {
+    "HoldRequired": false,
+    "Key": "Alpha4",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "tool5": {
+    "HoldRequired": false,
+    "Key": "Alpha5",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "tool6": {
+    "HoldRequired": false,
+    "Key": "Alpha6",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "tool7": {
+    "HoldRequired": false,
+    "Key": "Alpha7",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "tool8": {
+    "HoldRequired": false,
+    "Key": "Alpha8",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "tool9": {
+    "HoldRequired": false,
+    "Key": "Alpha9",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "spawnLeft": {
+    "HoldRequired": false,
+    "Key": "Q",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "spawnRight": {
+    "HoldRequired": false,
+    "Key": "E",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "left": {
+    "HoldRequired": false,
+    "Key": "A",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "right": {
+    "HoldRequired": false,
+    "Key": "D",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "fast": {
+    "HoldRequired": false,
+    "Key": "LeftShift",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "undo": {
+    "HoldRequired": false,
+    "Key": "Z",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "snap": {
+    "HoldRequired": false,
+    "Key": "LeftAlt",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "snapToCenter": {
+    "HoldRequired": false,
+    "Key": "M",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "copy": {
+    "HoldRequired": false,
+    "Key": "C",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "paste": {
+    "HoldRequired": false,
+    "Key": "V",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "context": {
+    "HoldRequired": false,
+    "Key": "Mouse1",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "igniteSelection": {
+    "HoldRequired": false,
+    "Key": "None",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "freezeSelection": {
+    "HoldRequired": false,
+    "Key": "None",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "resizeSelection": {
+    "HoldRequired": false,
+    "Key": "None",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "arrangeSelection": {
+    "HoldRequired": false,
+    "Key": "None",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "toggleThermalVision": {
+    "HoldRequired": false,
+    "Key": "T",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "eyedrop": {
+    "HoldRequired": false,
+    "Key": "None",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "arrangeDown": {
+    "HoldRequired": false,
+    "Key": "None",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "arrangeUp": {
+    "HoldRequired": false,
+    "Key": "None",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "arrangeFront": {
+    "HoldRequired": false,
+    "Key": "None",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "arrangeBack": {
+    "HoldRequired": false,
+    "Key": "None",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "pause": {
+    "HoldRequired": false,
+    "Key": "Escape",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "toybox": {
+    "HoldRequired": false,
+    "Key": "Tab",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "toggleUi": {
+    "HoldRequired": false,
+    "Key": "Caret",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "toolPowerToggle": {
+    "HoldRequired": false,
+    "Key": "LeftControl",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "toggleHoveringHighlights": {
+    "HoldRequired": false,
+    "Key": "None",
+    "SecondaryKey": "None",
+    "Universe": "Game"
+  },
+  "pan": {
+    "HoldRequired": false,
+    "Key": "Mouse2",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "panRight": {
+    "HoldRequired": false,
+    "Key": "RightArrow",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "panLeft": {
+    "HoldRequired": false,
+    "Key": "LeftArrow",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "panUp": {
+    "HoldRequired": false,
+    "Key": "UpArrow",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "panDown": {
+    "HoldRequired": false,
+    "Key": "DownArrow",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "zoomIn": {
+    "HoldRequired": false,
+    "Key": "KeypadPlus",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  },
+  "zoomOut": {
+    "HoldRequired": false,
+    "Key": "KeypadMinus",
+    "SecondaryKey": "None",
+    "Universe": "All"
+  }
+}

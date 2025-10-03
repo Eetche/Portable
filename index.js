@@ -60,12 +60,13 @@ app.whenReady().then(async () => {
   Window.createWindow();
 });
 
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") app.quit();
+app.on('window-all-closed', () => {
+  console.log("EXITING!!!")
+  app.exit(0)
 });
 
 app.on("web-contents-created", (event, contents) => {
-  contents.on("context-menu", (e, params) => {
+  contents.on("context-menu", (event, params) => {
     const win =
       BrowserWindow.fromWebContents(contents) ||
       BrowserWindow.getFocusedWindow();

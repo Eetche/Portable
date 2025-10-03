@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain } from "electron"
+import { BrowserWindow, ipcMain, app } from "electron"
 import path from "path"
 import { fileURLToPath } from "url"
 
@@ -25,6 +25,10 @@ class Window {
                 }
             }
         )
+
+        window.on('close', () => {
+            app.quit()
+        })
 
 
         window.loadFile(path.join(__dirname, "..", "windows", "index.html"));

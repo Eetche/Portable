@@ -12,7 +12,7 @@ app.on("ready", () => {
     title: "Settings",
     show: false,
     webPreferences: {
-      preload: path.resolve("preload.js")
+      preload: path.resolve(import.meta.dirname, "..", "preload.js")
     }
   });
 

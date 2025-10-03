@@ -10,11 +10,18 @@ const customsPath = path.join(
   "customization.json"
 );
 
-function refreshCustoms(mainColor) {
+function refreshCustoms(mainColor, secondColor) {
   BrowserWindow.getAllWindows().forEach(async (window) => {
     if (window.getTitle() == "Portable") {
       await window.webContents.executeJavaScript(`
                 document.body.style.backgroundColor = '${mainColor}'
+                document.querySelector(".topbar").style.backgroundColor = '${mainColor}'
+
+                document.querySelector(".tabs").style.backgroundColor = '${secondColor}'
+                document.querySelector(".topbar input").style.backgroundColor = '${secondColor}'
+                document.querySelectorAll(".topbar button").forEach((button) => {
+                    button.style.backgroundColor = '${secondColor}'
+                  })
                 `);
     }
   });
@@ -28,9 +35,7 @@ ipcMain.handle("restore-customs", async () => {
   const customs = await fs.promises.readFile(customsPath, "utf-8");
   const parsed = JSON.parse(customs);
 
-  console.log(parsed)
-
-  refreshCustoms(parsed.customs['main-color']);
+  refreshCustoms(parsed.customs['main-color'], parsed.customs['second-color']);
 });
 
 ipcMain.handle("inject-css", async (event, css) => {
@@ -41,6 +46,7 @@ ipcMain.handle("inject-css", async (event, css) => {
         const parsed = JSON.parse(customs);
 
         parsed.customs["main-color"] = css["main-color"];
+        parsed.customs["second-color"] = css["second-color"]
 
         await fs.promises.writeFile(
             customsPath,
@@ -50,7 +56,7 @@ ipcMain.handle("inject-css", async (event, css) => {
     } catch (error) {
         // ignore
     }
-    refreshCustoms(css['main-color']);
+    refreshCustoms(css['main-color'], css['second-color']);
 });
 
 
