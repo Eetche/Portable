@@ -6,8 +6,6 @@ values.forEach(async (value) => {
 
     value.value = customs.customs[value.id]
 
-    console.log(value)
-
     value.addEventListener('input', () => {
         colors[value.id] = value.value
 

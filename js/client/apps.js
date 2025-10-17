@@ -101,7 +101,11 @@ createAppBtn.addEventListener("click", async () => {
 
     appsObj.apps.push(newApp);
 
-    await window.electronAPI.writeApps(appsObj.apps);
+    const apps = await window.electronAPI.getApps()
+
+    apps.apps = appsObj.apps
+
+    await window.electronAPI.writeApps(apps);
 
     appsObj.newgame(newApp.title, newApp.icon, newApp.id, newApp.execute);
   }

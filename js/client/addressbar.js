@@ -36,7 +36,7 @@ function navigate(raw) {
 	const url = normalizeToUrl(raw);
 	if (!url) return;
 	webviewS.src = url;
-	showContent();
+	showContentAddress();
 }
 
 addressInput.addEventListener('keydown', (e) => {

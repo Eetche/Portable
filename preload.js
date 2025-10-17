@@ -3,8 +3,6 @@ const {contextBridge, ipcRenderer} = require('electron')
 contextBridge.exposeInMainWorld("electronAPI", {
     loadUrl: (url) => ipcRenderer.send("load-url", url),
 
-    // removeCSS: (key) => ipcRenderer.invoke("remove-css", key),
-
     openWebsite: (url) => ipcRenderer.invoke("open-website", url),
     openSteamApp: (id) => ipcRenderer.invoke("open-steam-app", id),
 
@@ -24,7 +22,9 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
     injectCSS: (css) => ipcRenderer.invoke("inject-css", css),
 
-    getCustoms: () => ipcRenderer.invoke("get-customs")
+    getCustoms: () => ipcRenderer.invoke("get-customs"),
+
+    getURLIcon: (url) => ipcRenderer.invoke("get-url-icon", url)
 })
 
 ipcRenderer.invoke("restore-customs")

@@ -1,4 +1,4 @@
-import { BrowserWindow, ipcMain, app } from "electron"
+import { BrowserWindow, app } from "electron"
 import path from "path"
 import { fileURLToPath } from "url"
 
@@ -27,7 +27,7 @@ class Window {
         )
 
         window.on('close', () => {
-            app.quit()
+            app.exit(0)
         })
 
 

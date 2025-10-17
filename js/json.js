@@ -40,7 +40,13 @@ async function writeApps(apps) {
   try {
     const data = await fs.promises.readFile(appsPath, "utf8");
     const parsed = JSON.parse(data);
-    parsed.apps = apps;
+
+    console.log("apps: " + JSON.stringify(apps, null, 2))
+
+    parsed.apps = apps.apps || [];
+    parsed.websites = apps.websites || [];
+
+    console.log(parsed)
     const strData = JSON.stringify(parsed, null, 2);
     await fs.promises.writeFile(appsPath, strData, "utf8");
   } catch (error) {

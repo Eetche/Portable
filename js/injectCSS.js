@@ -58,19 +58,3 @@ ipcMain.handle("inject-css", async (event, css) => {
     }
     refreshCustoms(css['main-color'], css['second-color']);
 });
-
-
-ipcMain.handle("remove-css", async (event, key) => {
-  const win = BrowserWindow.getFocusedWindow();
-  if (!win) return false;
-
-  try {
-    await win.webContents.removeInsertedCSS(key);
-    injectedCSSKeys.delete(key);
-    console.log("css deleted by key:", key);
-    return true;
-  } catch (error) {
-    console.error("css deleting error:", error);
-    return false;
-  }
-});

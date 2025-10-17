@@ -7,6 +7,7 @@ import launchGame from "./js/steam.js";
 import "./js/settingsWindowHandler.js"
 import "./js/fsHandlers.js";
 import "./js/jsonHandlers.js";
+import "./js/websitesHandlers.js"
 
 import { getApps } from "./js/json.js";
 
@@ -61,7 +62,6 @@ app.whenReady().then(async () => {
 });
 
 app.on('window-all-closed', () => {
-  console.log("EXITING!!!")
   app.exit(0)
 });
 
