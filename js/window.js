@@ -31,7 +31,7 @@ class Window {
         })
 
 
-        window.loadFile(path.join(__dirname, "..", "windows", "index.html"));
+        window.loadFile(path.join(__dirname, "..", "windows", "chat.html"));
 
         window.webContents.on('did-attach-webview', (event, webContents) => {
             webContents.setWindowOpenHandler(({ url }) => {

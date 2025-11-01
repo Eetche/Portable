@@ -42,14 +42,15 @@ createWebsiteBtn.addEventListener('click', async () => {
   async function deleteApp(appBlock, id) {
     const response = await window.electronAPI.getApps();
 
-    // const updatedApps = response.websites.filter((app) => app.id !== id); // FIX: ЭТА ШТУКА НЕ РОБИТ ОФФ ПОКА
+    const updatedApps = response.websites.filter((app) => app.id !== id);
+    console.log(updatedApps)
 
     await window.electronAPI.writeApps(updatedApps);
-    if (gamesBlock.contains(appBlock)) {
+    if (websitesBlock.contains(appBlock)) {
       appBlock.style.opacity = 0;
 
       setTimeout(() => {
-        gamesBlock.removeChild(appBlock);
+        websitesBlock.removeChild(appBlock);
       }, 150);
     }
   }

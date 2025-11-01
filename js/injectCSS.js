@@ -15,13 +15,17 @@ function refreshCustoms(mainColor, secondColor) {
     if (window.getTitle() == "Portable") {
       await window.webContents.executeJavaScript(`
                 document.body.style.backgroundColor = '${mainColor}'
-                document.querySelector(".topbar").style.backgroundColor = '${mainColor}'
 
-                document.querySelector(".tabs").style.backgroundColor = '${secondColor}'
-                document.querySelector(".topbar input").style.backgroundColor = '${secondColor}'
-                document.querySelectorAll(".topbar button").forEach((button) => {
-                    button.style.backgroundColor = '${secondColor}'
-                  })
+                if (document.querySelector(".topbar")) {
+                  document.querySelector(".topbar").style.backgroundColor = '${mainColor}'
+
+                  document.querySelector(".tabs").style.backgroundColor = '${secondColor}'
+                  document.querySelector(".topbar input").style.backgroundColor = '${secondColor}'
+                  document.querySelectorAll(".topbar button").forEach((button) => {
+                      button.style.backgroundColor = '${secondColor}'
+                    })
+                }
+
                 `);
     }
   });

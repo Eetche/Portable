@@ -1,9 +1,3 @@
 {
-  "tabs": [
-    {
-      "title": "DeepSeek - Into the Unknown",
-      "id": 0,
-      "src": "https://chat.deepseek.com/sign_in"
-    }
-  ]
+  "tabs": []
 }
