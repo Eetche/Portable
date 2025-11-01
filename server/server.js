@@ -25,7 +25,7 @@ io.on('connection', (socket) => {
     {
         media : string,
         text : string,
-        socketID: string
+        socketID : string
     }
 
     */

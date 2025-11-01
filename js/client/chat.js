@@ -12,6 +12,7 @@ socket.on("server_broadcast_send_message", (message) => {
 })
 
 const button = document.querySelector("button")
+const input = document.querySelector("input")
 
 class DataSender {
 
@@ -37,5 +38,5 @@ class SocketListeners {
 button.addEventListener('click', () => {
     (isConnected) ? undefined : () => {return}
 
-    DataSender.sendMessage("hello guys", undefined)
+    DataSender.sendMessage(input.value, undefined)
 })
