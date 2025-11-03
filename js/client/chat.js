@@ -1,4 +1,11 @@
-const socket = io("http://localhost:9999")
+import getCookie from "./cookies.js"
+import socket from "./socket.js"
+
+window.onload = () => {
+    if (!getCookie("authorized")) {
+        window.location.href = "auth.html"
+    }
+}
 
 let isConnected = false;
 

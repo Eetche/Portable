@@ -2,10 +2,6 @@ import { ipcMain } from "electron"
 
 import { writeApps, writeTabs, getApps, getTabs } from "../js/json.js"
 
-import fs from "fs"
-
-import path from "path"
-
 ipcMain.handle("write-tabs", (event, data) => {
 	writeTabs(data)
 })

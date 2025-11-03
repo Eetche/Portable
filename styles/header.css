@@ -1,0 +1,151 @@
+.search {
+    height: 40px;
+    border: 1px solid rgba(255,255,255, 0.1);
+    border-radius: 10px;
+    background-color: var(--el-bg);
+    width: 50%;
+    display: flex;
+    justify-content: center;
+    flex-direction: row;
+    margin: 0 auto;
+    margin-top: 70px;
+
+}
+
+.search input {
+    width: 90%;
+    height: 90%;
+    background-color: var(--el-bg);
+    outline: none;
+    border: none;
+    color: white;
+    font-size: 100%;
+}
+
+.search svg {
+    transform: scale(-70%, 70%);
+}
+
+.topbar {
+	position: fixed;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 70px;
+	background-color: var(--el-bg);
+	border-bottom: 1px solid rgba(255,255,255, 0.1);
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 8px;
+	padding: 0 12px;
+	z-index: 1000;
+}
+
+.topbar button {
+	background: rgb(45,45,45);
+	color: #fff;
+	border: 1px solid rgba(255,255,255,0.1);
+	border-radius: 6px;
+	height: 36px;
+	width: 36px;
+	cursor: pointer;
+	outline: none;
+    font-size: 1.1rem;
+}
+
+.topbar input {
+	height: 36px;
+	background-color: rgb(30,30,30);
+	outline: none;
+	border: 1px solid rgba(255,255,255,0.1);
+	border-radius: 6px;
+	color: white;
+    width: 80%;
+	font-size: 14px;
+	padding: 0 10px;
+}
+
+#content {
+    cursor: url("file:///media/default4x.png");
+	position: absolute;
+	left: 0;
+	top: 110px;
+	width: 100%;
+	bottom: 0;
+	display: none;
+}
+
+#content.active {
+	display: block;
+}
+
+#webview {
+	width: 100%;
+	height: 100%;
+	border: none;
+	background: #000;
+}
+
+.search { margin-top: 20px; }
+
+.tabs {
+    z-index: 1001;
+    position: fixed;
+    top: 70px;
+    left: 0px;
+    width: 100%;
+    height: 25px;
+    background-color: rgb(55,55,55);
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    border-bottom: 1px solid rgba(255,255,255, 0.1);
+}
+
+.newtab {
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 1.2rem;
+    color: white;
+    order: 999;
+    padding: 5px;
+    margin-left: 15px;
+}
+
+.tab {
+    cursor: pointer;
+    color: white;
+    height: 100%;
+    border-right: 1px solid rgba(255,255,255, 0.1);
+    border-left: 1px solid rgba(255,255,255, 0.1);
+    display: flex;
+    align-items: center;
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 0.9rem;
+    transition: ease 0.2s;
+    opacity: 0.5;
+}
+
+.tab:hover {
+    opacity: 1;
+}
+
+.tab.active {
+    opacity: 1;
+}
+
+.closeTab {
+    transform: rotate(45deg);
+    font-weight: 900;
+    font-size: 1.5rem;
+    margin-left: 5px;
+    padding: 5px;
+    transition: all 0.1s;
+}
+
+.closeTab:hover {
+    color: rgba(255,255,255, 0.7);
+}

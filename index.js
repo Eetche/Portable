@@ -1,5 +1,7 @@
 import { app, ipcMain, BrowserWindow, shell, Menu } from "electron";
 
+import axios from "axios"
+
 import Window from "./js/window.js";
 import launchGame from "./js/steam.js";
 
@@ -20,6 +22,25 @@ ipcMain.handle("open-steam-app", (event, id) => {
   } catch (error) {
     console.error("open-steam-app error: " + error);
   }
+});
+
+ipcMain.handle("auth-post", async (event, username, password) => {
+	try {
+		const { data, status } = await axios.post(
+			"http://localhost:9999/api/auth",
+			{ username, password },
+			{ headers: { "Content-Type": "application/json" } }
+		);
+		console.log("auth-post ok:", status, data);
+		return data;
+	} catch (error) {
+		if (error.response) {
+			console.error("auth-post http error:", error.response.status, error.response.data);
+			return error.response.data;
+		}
+		console.error("auth-post request error:", error.message);
+		return { success: false, message: error.message };
+	}
 });
 
 async function updateUserTasks() {

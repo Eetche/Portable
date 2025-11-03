@@ -2,6 +2,7 @@ const {contextBridge, ipcRenderer} = require('electron')
 
 contextBridge.exposeInMainWorld("electronAPI", {
     loadUrl: (url) => ipcRenderer.send("load-url", url),
+    loadFile: (fileName) => ipcRenderer.send("load-file", fileName),
 
     openWebsite: (url) => ipcRenderer.invoke("open-website", url),
     openSteamApp: (id) => ipcRenderer.invoke("open-steam-app", id),
@@ -24,7 +25,12 @@ contextBridge.exposeInMainWorld("electronAPI", {
 
     getCustoms: () => ipcRenderer.invoke("get-customs"),
 
-    getURLIcon: (url) => ipcRenderer.invoke("get-url-icon", url)
+    getURLIcon: (url) => ipcRenderer.invoke("get-url-icon", url),
+
+    authPOST: (username, password) => ipcRenderer.invoke("auth-post", username, password),
+
+    getCookie: (url) => ipcRenderer.invoke("get-cookie", url),
+    setCookie: (data) => ipcRenderer.invoke("set-cookie", data)
 })
 
 ipcRenderer.invoke("restore-customs")
