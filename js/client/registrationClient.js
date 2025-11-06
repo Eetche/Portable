@@ -20,4 +20,4 @@ registerForm.addEventListener("submit", async (e) => {
         window.location.href = "auth.html"
     }
 
-})``
+})

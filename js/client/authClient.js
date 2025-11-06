@@ -10,7 +10,8 @@ authForm.addEventListener('submit', async (event) => {
 
     if (response.success) {
         document.cookie = "authorized=true"
-        window.location.href = "chat.html"
+        console.log(document.cookie)
+        // window.location.href = "chat.html"
     } else {
         alert("Неправильный логин или пароль")
     }

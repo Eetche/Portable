@@ -28,6 +28,7 @@ contextBridge.exposeInMainWorld("electronAPI", {
     getURLIcon: (url) => ipcRenderer.invoke("get-url-icon", url),
 
     authPOST: (username, password) => ipcRenderer.invoke("auth-post", username, password),
+    regPOST: (username, password) => ipcRenderer.invoke("reg-post", username, password),
 
     getCookie: (url) => ipcRenderer.invoke("get-cookie", url),
     setCookie: (data) => ipcRenderer.invoke("set-cookie", data)

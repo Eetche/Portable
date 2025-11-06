@@ -43,6 +43,25 @@ ipcMain.handle("auth-post", async (event, username, password) => {
 	}
 });
 
+ipcMain.handle("reg-post", async (event, username, password) => {
+	try {
+		const { data, status } = await axios.post(
+			"http://localhost:9999/api/reg",
+			{ username, password },
+			{ headers: { "Content-Type": "application/json" } }
+		);
+		console.log("reg-post ok:", status, data);
+		return data;
+	} catch (error) {
+		if (error.response) {
+			console.error("reg-post http error:", error.response.status, error.response.data);
+			return error.response.data;
+		}
+		console.error("reg-post request error:", error.message);
+		return { success: false, message: error.message };
+	}
+});
+
 async function updateUserTasks() {
   const response = await getApps();
 
