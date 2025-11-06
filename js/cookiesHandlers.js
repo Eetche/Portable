@@ -16,4 +16,3 @@ ipcMain.handle("set-cookie", async (event, data) => {
     return { success: false, error: error.message };
   }
 })
-

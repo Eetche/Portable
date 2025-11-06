@@ -125,6 +125,12 @@ const server = http.createServer((req, res) => {
       }
     });
   }
+
+  if (req.url == "/windows/index.html") {
+    console.log("index")
+    res.end("123")
+  }
+
 });
 const io = new Server(server);
 

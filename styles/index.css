@@ -19,7 +19,7 @@
     transform: scale(1.5);
 }
 
-.settings {
+.settings, .menu, .chat {
     cursor: pointer;
     position: fixed;
     right: 10px;
@@ -30,11 +30,16 @@
     border-radius: 50%;
 }
 
-.settings:hover {
+.settings:hover, .menu:hover, .chat:hover {
     background-color: rgb(55,55,55);
 }
 
-.settings img {
+
+.settings img, .menu img, .chat img {
     width: 32px;
     height: 32px;
+}
+
+.menu .menuChild {
+    opacity: 0;
 }

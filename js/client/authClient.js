@@ -9,9 +9,8 @@ authForm.addEventListener('submit', async (event) => {
     const response = await window.electronAPI.authPOST(loginField.value, passwordField.value)
 
     if (response.success) {
-        document.cookie = "authorized=true"
-        console.log(document.cookie)
-        // window.location.href = "chat.html"
+        localStorage.setItem("authorized", true)
+        window.location.href = "chat.html"
     } else {
         alert("Неправильный логин или пароль")
     }

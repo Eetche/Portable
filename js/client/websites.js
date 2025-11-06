@@ -70,12 +70,15 @@ function newWebsite(url, id, icon) {
         websitesBlock.appendChild(appendWebsite)
 
 
-        deleteAppBtn.addEventListener('click', () => {
-            deleteApp(deleteAppBtn, id)
+        deleteAppBtn.addEventListener('click', (e) => {
+          e.stopPropagation()
+
+            deleteApp(appendWebsite, id)
         })
 
 
-        appendWebsite.addEventListener('click', () => {
+        appendWebsite.addEventListener('click', (e) => {
+
             contentWebsites.classList.add('active')
             webview.src = url
         })

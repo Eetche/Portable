@@ -10,6 +10,7 @@ import "./js/settingsWindowHandler.js"
 import "./js/fsHandlers.js";
 import "./js/jsonHandlers.js";
 import "./js/websitesHandlers.js"
+import "./js/cookiesHandlers.js"
 
 import { getApps } from "./js/json.js";
 
@@ -80,6 +81,7 @@ async function updateUserTasks() {
 }
 
 app.whenReady().then(async () => {
+
   ipcMain.handle("update-user-tasks", (event) => {
     updateUserTasks();
   });

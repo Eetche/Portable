@@ -1,8 +1,7 @@
-import getCookie from "./cookies.js"
 import socket from "./socket.js"
 
-window.onload = () => {
-    if (!getCookie("authorized")) {
+window.onload = async () => {
+    if (!localStorage.getItem("authorized")) {
         window.location.href = "auth.html"
     }
 }
@@ -12,7 +11,7 @@ let isConnected = false;
 socket.on("connect", () => {
     isConnected = true;
     console.log("! client connected: " + socket.id)
-    
+
 })
 socket.on("server_broadcast_send_message", (message) => {
     SocketListeners.getMessage(message.socketID, undefined, message.text, message.media)
@@ -48,15 +47,15 @@ class SocketListeners {
 function createMessage(media, text, my) {
     const message = document.createElement("div")
     message.classList.add("message")
-    
+
     if (my) {
         message.classList.add("my")
     }
 
-    
+
     const messageText = document.createElement("span")
     messageText.textContent = text
-    
+
     if (media) {
         const messageMedia = document.createElement("img")
         messageMedia.classList.add("messageMedia")
