@@ -14,7 +14,7 @@ socket.on("connect", () => {
 
 })
 socket.on("server_broadcast_send_message", (message) => {
-    SocketListeners.getMessage(message.socketID, undefined, message.text, message.media)
+    SocketListeners.getMessage(message.userID, undefined, message.text, message.media)
 })
 
 const button = document.querySelector("button")
@@ -23,28 +23,43 @@ const content = document.querySelector(".content")
 
 class DataSender {
 
-    static sendMessage(text, mediaDataURL) {
+    static async sendMessage(text, mediaDataURL) {
         if (!text) return
 
         input.value = ""
 
-        socket.emit("send_message", {
-            media: mediaDataURL,
-            text: text,
-            socketID: socket.id
-        })
+        const account = JSON.parse(localStorage.getItem("account"));
+
+        const authResponse = await window.electronAPI.authPOST(account.username, account.password)
+
+        const accountInfo = await window.electronAPI.accInfoPOST(account.username, account.password)
+
+        console.log(accountInfo)
+
+        if (authResponse.success) {
+            socket.emit("send_message", {
+                media: mediaDataURL,
+                text: text,
+                userID: accountInfo.id
+            })
+        } else {
+            return // creating error message
+        }
+
     }
 }
 
 class SocketListeners {
-    static getMessage(senderID, group, text, mediaDataURL) {
-        createMessage(mediaDataURL, text, false)
+    static async getMessage(senderID, group, text, mediaDataURL) {
+        const user = await window.electronAPI.accInfoByIdPOST(senderID)
+
+        createMessage(user.username, undefined, mediaDataURL, text, false)
 
         console.log(text)
     }
 }
 
-function createMessage(media, text, my) {
+function createMessage(author, avatar, media, text, my) {
     const message = document.createElement("div")
     message.classList.add("message")
 
@@ -52,8 +67,12 @@ function createMessage(media, text, my) {
         message.classList.add("my")
     }
 
+    const authorUsername = document.createElement("span")
 
-    const messageText = document.createElement("span")
+    authorUsername.textContent = author
+
+
+    const messageText = document.createElement("p")
     messageText.textContent = text
 
     if (media) {
@@ -64,6 +83,7 @@ function createMessage(media, text, my) {
     }
 
     content.appendChild(message)
+    message.appendChild(authorUsername)
     message.appendChild(messageText)
 
 }

@@ -19,7 +19,7 @@
     transform: scale(1.5);
 }
 
-.settings, .menu, .chat {
+.settings, .menuIcon, .chat {
     cursor: pointer;
     position: fixed;
     right: 10px;
@@ -42,4 +42,12 @@
 
 .menu .menuChild {
     opacity: 0;
+}
+
+.menuContainer {
+    height: auto;
+    width: 70px;
+    position: fixed;
+    right: 10px;
+    bottom: 10px;
 }

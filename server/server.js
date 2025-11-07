@@ -126,10 +126,67 @@ const server = http.createServer((req, res) => {
     });
   }
 
-  if (req.url == "/windows/index.html") {
-    console.log("index")
-    res.end("123")
+  if (req.method == "POST", req.url == "/api/acc-info") {
+    let body = "";
+
+    req.on("data", (chunk) => {
+      body += chunk;
+    })
+
+    req.on("end", async () => {
+      const db = await fs.promises.readFile(path.join(__dirname, "db", "db.json"), 'utf-8')
+
+      const dbParsed = JSON.parse(db)
+
+      const bodyParsed = JSON.parse(body)
+
+      const user = dbParsed.users.find((u) => bodyParsed.username == u.username && bodyParsed.password == u.password)
+
+      if (user) {
+        res.writeHead(200, { "content-type": "application/json" })
+        res.end(JSON.stringify(user))
+      } else {
+        res.writeHead(500)
+        res.end(undefined)
+      }
+    })
+
+
   }
+
+    if (req.method == "POST", req.url == "/api/acc-info-by-id") {
+    let body = "";
+
+    req.on("data", (chunk) => {
+      body += chunk;
+    })
+
+    req.on("end", async () => {
+      const db = await fs.promises.readFile(path.join(__dirname, "db", "db.json"), 'utf-8')
+
+      const dbParsed = JSON.parse(db)
+
+      const bodyParsed = JSON.parse(body)
+
+      console.log(bodyParsed)
+
+      const user = dbParsed.users.find((u) => bodyParsed.id == u.id)
+
+      console.log("FINDED USER:", user)
+
+      if (user) {
+        res.writeHead(200, { "content-type": "application/json" })
+        res.end(JSON.stringify({username: user.username})) // maybe avatar and other acc info
+      } else {
+        res.writeHead(500)
+        res.end(undefined)
+      }
+    })
+
+
+  }
+
+
 
 });
 const io = new Server(server);
@@ -152,7 +209,7 @@ io.on("connection", (socket) => {
     {
         media : string,
         text : string,
-        socketID : string
+        userID : string
     }
 
     */
@@ -163,7 +220,7 @@ io.on("connection", (socket) => {
 
     media: ${message.media},
     text: ${message.text},
-    socketID: ${message.socketID}
+    userID: ${message.userID}
             `);
 
     socket.broadcast.emit("server_broadcast_send_message", message);

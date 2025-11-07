@@ -10,6 +10,10 @@ authForm.addEventListener('submit', async (event) => {
 
     if (response.success) {
         localStorage.setItem("authorized", true)
+        localStorage.setItem("account", JSON.stringify({
+            "username": loginField.value,
+            "password": passwordField.value
+        }))
         window.location.href = "chat.html"
     } else {
         alert("Неправильный логин или пароль")

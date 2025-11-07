@@ -1,20 +1,19 @@
 import { app, ipcMain, BrowserWindow, shell, Menu } from "electron";
 
-import axios from "axios"
+import axios from "axios";
 
 import Window from "./js/window.js";
 import launchGame from "./js/steam.js";
 
-
-import "./js/settingsWindowHandler.js"
+import "./js/settingsWindowHandler.js";
 import "./js/fsHandlers.js";
 import "./js/jsonHandlers.js";
-import "./js/websitesHandlers.js"
-import "./js/cookiesHandlers.js"
+import "./js/websitesHandlers.js";
+import "./js/cookiesHandlers.js";
 
 import { getApps } from "./js/json.js";
 
-import "./js/injectCSS.js"
+import "./js/injectCSS.js";
 
 ipcMain.handle("open-steam-app", (event, id) => {
   try {
@@ -26,42 +25,84 @@ ipcMain.handle("open-steam-app", (event, id) => {
 });
 
 ipcMain.handle("auth-post", async (event, username, password) => {
-	try {
-		const { data, status } = await axios.post(
-			"http://localhost:9999/api/auth",
-			{ username, password },
-			{ headers: { "Content-Type": "application/json" } }
-		);
-		console.log("auth-post ok:", status, data);
-		return data;
-	} catch (error) {
-		if (error.response) {
-			console.error("auth-post http error:", error.response.status, error.response.data);
-			return error.response.data;
-		}
-		console.error("auth-post request error:", error.message);
-		return { success: false, message: error.message };
-	}
+  try {
+    const { data, status } = await axios.post(
+      "http://localhost:9999/api/auth",
+      { username, password },
+      { headers: { "Content-Type": "application/json" } }
+    );
+    console.log("auth-post ok:", status, data);
+    return data;
+  } catch (error) {
+    if (error.response) {
+      console.error(
+        "auth-post http error:",
+        error.response.status,
+        error.response.data
+      );
+      return error.response.data;
+    }
+    console.error("auth-post request error:", error.message);
+    return { success: false, message: error.message };
+  }
 });
 
 ipcMain.handle("reg-post", async (event, username, password) => {
-	try {
-		const { data, status } = await axios.post(
-			"http://localhost:9999/api/reg",
-			{ username, password },
-			{ headers: { "Content-Type": "application/json" } }
-		);
-		console.log("reg-post ok:", status, data);
-		return data;
-	} catch (error) {
-		if (error.response) {
-			console.error("reg-post http error:", error.response.status, error.response.data);
-			return error.response.data;
-		}
-		console.error("reg-post request error:", error.message);
-		return { success: false, message: error.message };
-	}
+  try {
+    const { data, status } = await axios.post(
+      "http://localhost:9999/api/reg",
+      { username, password },
+      { headers: { "Content-Type": "application/json" } }
+    );
+    console.log("reg-post ok:", status, data);
+    return data;
+  } catch (error) {
+    if (error.response) {
+      console.error(
+        "reg-post http error:",
+        error.response.status,
+        error.response.data
+      );
+      return error.response.data;
+    }
+    console.error("reg-post request error:", error.message);
+    return { success: false, message: error.message };
+  }
 });
+
+ipcMain.handle("acc-info", async (event, username, password) => {
+  try {
+    const { data, status } = await axios.post(
+      "http://localhost:9999/api/acc-info",
+      { username, password },
+      { headers: { "Content-Type": "application/json" } }
+    );
+
+    console.log("acc-info ok:", status, data)
+    return data
+  } catch (error) {
+
+    console.error("acc-info error:", error.message)
+    return undefined
+
+  }
+});
+
+ipcMain.handle("acc-info-by-id", async (event, id) => {
+  try {
+    const { data, status } = await axios.post(
+      "http://localhost:9999/api/acc-info-by-id",
+      {id},
+      {headers: {"Content-Type": "application/json"}})
+
+      console.log("acc-info-by-id ok:", status, data)
+
+      return data
+
+  } catch (error) {
+    console.error("acc-info-by-id error:", error.message)
+  }
+})
 
 async function updateUserTasks() {
   const response = await getApps();
@@ -81,7 +122,6 @@ async function updateUserTasks() {
 }
 
 app.whenReady().then(async () => {
-
   ipcMain.handle("update-user-tasks", (event) => {
     updateUserTasks();
   });
@@ -103,8 +143,8 @@ app.whenReady().then(async () => {
   Window.createWindow();
 });
 
-app.on('window-all-closed', () => {
-  app.exit(0)
+app.on("window-all-closed", () => {
+  app.exit(0);
 });
 
 app.on("web-contents-created", (event, contents) => {

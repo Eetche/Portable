@@ -1,11 +1,13 @@
 const menu = document.querySelector(".menu")
 
+const menuContainer = document.querySelector(".menuContainer")
+
 const menuChilds = document.querySelectorAll(".menu .menuChild")
 
 const menuChildHeight = 52
 const margin = 10;
 
-menu.addEventListener('mouseover', () => {
+menuContainer.addEventListener('mouseover', () => {
 
     let botPx = 72
 
@@ -14,11 +16,15 @@ menu.addEventListener('mouseover', () => {
         child.style.opacity = 1;
         botPx += menuChildHeight + margin;
     })
+
+    menuContainer.style.height = botPx + 20;
 })
 
-menu.addEventListener('mouseout', () => {
+menuContainer.addEventListener('mouseout', () => {
     menuChilds.forEach((child) => {
         child.style.bottom = margin
         child.style.opacity = 0
     })
+
+    menuContainer.style.height = "auto"
 })
