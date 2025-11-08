@@ -1,5 +1,5 @@
 html, body {
-    background-color: rgb(40,40,40);
+    background-color: rgb(5,5,5);
     margin: 0;
     min-width: 100vw;
     min-height: 100vh;
@@ -58,4 +58,9 @@ p {
     max-width: 50%;
     margin-top: 10px;
     margin-bottom: 10px;
+    word-wrap: normal;
+}
+
+.my {
+    background-color: rgb(15,15,15);
 }

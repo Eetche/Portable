@@ -1,7 +1,7 @@
-import socket from "./socket.js"
+const socket = io("http://localhost:9999")
 
 window.onload = async () => {
-    if (!localStorage.getItem("authorized")) {
+    if (!localStorage.getItem("account")) {
         window.location.href = "auth.html"
     }
 }
@@ -42,6 +42,8 @@ class DataSender {
                 text: text,
                 userID: accountInfo.id
             })
+
+            createMessage(account.username, undefined, undefined, text, true)
         } else {
             return // creating error message
         }

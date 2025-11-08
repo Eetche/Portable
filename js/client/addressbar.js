@@ -41,7 +41,6 @@ function navigate(raw) {
 
 addressInput.addEventListener('keydown', (e) => {
 	if (e.key === 'Enter') {
-        console.log("search")
         navigate(addressInput.value)
     }
 });

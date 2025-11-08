@@ -2,7 +2,7 @@ const {contextBridge, ipcRenderer} = require('electron')
 
 contextBridge.exposeInMainWorld("electronAPI", {
     loadUrl: (url) => ipcRenderer.send("load-url", url),
-    loadFile: (fileName) => ipcRenderer.send("load-file", fileName),
+    loadFile: (fileName) => ipcRenderer.invoke("load-file", fileName),
 
     openWebsite: (url) => ipcRenderer.invoke("open-website", url),
     openSteamApp: (id) => ipcRenderer.invoke("open-steam-app", id),

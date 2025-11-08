@@ -3,13 +3,12 @@ html, body {
     min-height: 100vh;
     margin: 0;
     overflow-x: hidden;
-    overflow-y: hidden;
     padding-top: 110px;
     background-color: var(--el-bg);
 }
 
 :root {
-    --el-bg: rgb(30,30,30)
+    --el-bg: rgb(5,5,5)
 }
 
 * {

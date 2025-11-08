@@ -2,6 +2,7 @@ const authForm = document.querySelector(".authForm form")
 const loginField = document.getElementById("login")
 const passwordField =  document.getElementById("password")
 
+
 authForm.addEventListener('submit', async (event) => {
     event.preventDefault()
 
@@ -9,7 +10,6 @@ authForm.addEventListener('submit', async (event) => {
     const response = await window.electronAPI.authPOST(loginField.value, passwordField.value)
 
     if (response.success) {
-        localStorage.setItem("authorized", true)
         localStorage.setItem("account", JSON.stringify({
             "username": loginField.value,
             "password": passwordField.value

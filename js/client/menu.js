@@ -1,8 +1,10 @@
-const menu = document.querySelector(".menu")
+const webviewMenu = document.getElementById("webview")
 
 const menuContainer = document.querySelector(".menuContainer")
 
 const menuChilds = document.querySelectorAll(".menu .menuChild")
+
+const chat = document.querySelector(".chat")
 
 const menuChildHeight = 52
 const margin = 10;
@@ -27,4 +29,10 @@ menuContainer.addEventListener('mouseout', () => {
     })
 
     menuContainer.style.height = "auto"
+})
+
+chat.addEventListener('click', () => {
+    
+
+    window.electronAPI.loadFile("chat.html")
 })
