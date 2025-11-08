@@ -1,5 +1,6 @@
 import { Server } from "socket.io";
 import http from "http";
+import express from "express"
 
 import { nanoid } from "nanoid";
 
@@ -11,164 +12,132 @@ config();
 
 import { fileURLToPath } from "url";
 
+const app = express()
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const server = http.createServer((req, res) => {
-  res.setHeader("Access-Control-Allow-Origin", "*");
-  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
-  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-  if (req.method === "POST" && req.url === "/api/auth") {
-    let body = "";
+app.post("/api/auth", async (req, res) => {
 
-    req.on("data", (chunk) => {
-      body += chunk.toString();
-    });
+  console.log(req.body)
 
-    req.on("end", async () => {
-      try {
-        const data = JSON.parse(body);
-        const database = await fs.promises.readFile(
-          path.join(__dirname, "db", "db.json"),
-          "utf-8"
-        );
-        const databaseParsed = JSON.parse(database);
+    try {
+      const data = req.body
+      const database = await fs.promises.readFile(
+        path.join(__dirname, "db", "db.json"),
+        "utf-8"
+      );
+      const databaseParsed = JSON.parse(database);
 
-        console.log("req data:", data);
-        console.log("db users:", databaseParsed.users);
+      console.log("req data:", data);
+      console.log("db users:", databaseParsed.users);
 
-        const user = databaseParsed.users.find(
-          (u) => u.username === data.username && u.password === data.password
-        );
+      const user = databaseParsed.users.find(
+        (u) => u.username === data.username && u.password === data.password
+      );
 
-        console.log("matched user:", user);
-
-        if (user) {
-          res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(
-            JSON.stringify({
-              success: true,
-            })
-          );
-        } else {
-          res.writeHead(401, { "Content-Type": "application/json" });
-          res.end(
-            JSON.stringify({
-              success: false,
-            })
-          );
-        }
-      } catch (error) {
-        console.error("Auth handler error:", error);
-        res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ success: false }));
-      }
-    });
-  }
-
-  if (req.method === "POST" && req.url === "/api/reg") {
-    let body = "";
-
-    req.on("data", (chunk) => {
-      body += chunk.toString();
-    });
-
-    req.on("end", async () => {
-      try {
-        const data = JSON.parse(body);
-        const database = await fs.promises.readFile(
-          path.join(__dirname, "db", "db.json"),
-          "utf-8"
-        );
-        const databaseParsed = JSON.parse(database);
-
-        console.log("req data:", data);
-        console.log("db users:", databaseParsed.users);
-
-        const user = databaseParsed.users.find(
-          (u) => u.username === data.username || u.password === data.password
-        );
-
-        if (user) {
-            console.error("database already has user with same password or login")
-          res.writeHead(500, { "Content-Type": "application/json" });
-          res.end(
-            JSON.stringify({
-              success: false,
-            })
-          );
-        } else {
-            const newUser = {
-                username: data.username,
-                password: data.password,
-                id: nanoid()
-            }
-
-            databaseParsed.users.push(newUser)
-
-            const stringifyDB = JSON.stringify(databaseParsed, null, 2)
-
-            await fs.promises.writeFile(path.join(__dirname, "db", "db.json"), stringifyDB, 'utf8')
-
-          res.writeHead(200, { "Content-Type": "application/json" });
-          res.end(
-            JSON.stringify({
-              success: true,
-            })
-          );
-        }
-      } catch (error) {
-        console.error("Reg handler error:", error);
-        res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ success: false }));
-      }
-    });
-  }
-
-  if (req.method == "POST", req.url == "/api/acc-info") {
-    let body = "";
-
-    req.on("data", (chunk) => {
-      body += chunk;
-    })
-
-    req.on("end", async () => {
-      const db = await fs.promises.readFile(path.join(__dirname, "db", "db.json"), 'utf-8')
-
-      const dbParsed = JSON.parse(db)
-
-      const bodyParsed = JSON.parse(body)
-
-      const user = dbParsed.users.find((u) => bodyParsed.username == u.username && bodyParsed.password == u.password)
+      console.log("matched user:", user);
 
       if (user) {
-        res.writeHead(200, { "content-type": "application/json" })
-        res.end(JSON.stringify(user))
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            success: true,
+          })
+        );
       } else {
-        res.writeHead(500)
-        res.end(undefined)
+        res.writeHead(401, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            success: false,
+          })
+        );
       }
-    })
+    } catch (error) {
+      console.error("Auth handler error:", error);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ success: false }));
+    }
+  });
 
+app.post("/api/reg", async (req, res) => {
+    try {
+      const data = req.body
+      const database = await fs.promises.readFile(
+        path.join(__dirname, "db", "db.json"),
+        "utf-8"
+      );
+      const databaseParsed = JSON.parse(database);
 
-  }
+      console.log("req data:", data);
+      console.log("db users:", databaseParsed.users);
 
-    if (req.method == "POST", req.url == "/api/acc-info-by-id") {
-    let body = "";
+      const user = databaseParsed.users.find(
+        (u) => u.username === data.username || u.password === data.password
+      );
 
-    req.on("data", (chunk) => {
-      body += chunk;
-    })
+      if (user) {
+        console.error("database already has user with same password or login")
+        res.writeHead(500, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            success: false,
+          })
+        );
+      } else {
+        const newUser = {
+          username: data.username,
+          password: data.password,
+          id: nanoid()
+        }
 
-    req.on("end", async () => {
+        databaseParsed.users.push(newUser)
+
+        const stringifyDB = JSON.stringify(databaseParsed, null, 2)
+
+        await fs.promises.writeFile(path.join(__dirname, "db", "db.json"), stringifyDB, 'utf8')
+
+        res.writeHead(200, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            success: true,
+          })
+        );
+      }
+    } catch (error) {
+      console.error("Reg handler error:", error);
+      res.writeHead(500, { "Content-Type": "application/json" });
+      res.end(JSON.stringify({ success: false }));
+    }
+  });
+
+app.post("/api/acc-info", async (req, res) => {
+    const db = await fs.promises.readFile(path.join(__dirname, "db", "db.json"), 'utf-8')
+
+    const dbParsed = JSON.parse(db)
+
+    const bodyParsed = req.body
+
+    const user = dbParsed.users.find((u) => bodyParsed.username == u.username && bodyParsed.password == u.password)
+
+    if (user) {
+      res.writeHead(200, { "content-type": "application/json" })
+      res.end(JSON.stringify(user))
+    } else {
+      res.writeHead(500)
+      res.end(undefined)
+    }
+  })
+
+app.post("/api/acc-info-by-id", async (req, res) => {
       const db = await fs.promises.readFile(path.join(__dirname, "db", "db.json"), 'utf-8')
 
       const dbParsed = JSON.parse(db)
 
-      const bodyParsed = JSON.parse(body)
-
-      console.log(bodyParsed)
+      const bodyParsed = req.body
 
       const user = dbParsed.users.find((u) => bodyParsed.id == u.id)
 
@@ -176,19 +145,14 @@ const server = http.createServer((req, res) => {
 
       if (user) {
         res.writeHead(200, { "content-type": "application/json" })
-        res.end(JSON.stringify({username: user.username})) // maybe avatar and other acc info
+        res.end(JSON.stringify({ username: user.username })) // maybe avatar and other acc info
       } else {
         res.writeHead(500)
         res.end(undefined)
       }
     })
 
-
-  }
-
-
-
-});
+const server = http.createServer(app)
 const io = new Server(server);
 
 const PORT = process.env.PORT || 9999;
