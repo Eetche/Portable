@@ -47,11 +47,11 @@ ipcMain.handle("reg-post", async (event, username, password) => {
   }
 });
 
-ipcMain.handle("acc-info", async (event, username, password) => {
+ipcMain.handle("acc-info", async (event, username, token) => {
   try {
     const { data, status } = await axios.post(
       "http://localhost:9999/api/acc-info",
-      { username, password },
+      { username, token },
       { headers: { "Content-Type": "application/json" } }
     );
 
@@ -78,5 +78,21 @@ ipcMain.handle("acc-info-by-id", async (event, id) => {
 
   } catch (error) {
     console.error("acc-info-by-id error:", error.message)
+  }
+})
+
+ipcMain.handle("auth-token", async (event, username, token) => {
+try {
+    const { data, status } = await axios.post(
+      "http://localhost:9999/api/auth-token",
+      {username, token},
+      {headers: {"Content-Type": "application/json"}})
+
+      console.log("auth-token ok:", status, data)
+
+      return data
+
+  } catch (error) {
+    console.error("auth-token error:", error.message)
   }
 })

@@ -1,6 +1,5 @@
 import { app, ipcMain, BrowserWindow, shell, Menu } from "electron";
-
-import axios from "axios";
+import path from "path"
 
 import Window from "./js/window.js";
 import launchGame from "./js/steam.js";
@@ -16,6 +15,7 @@ import { getApps } from "./js/json.js";
 
 import "./js/injectCSS.js";
 
+
 ipcMain.handle("open-steam-app", (event, id) => {
   try {
     launchGame(id);
@@ -30,12 +30,12 @@ ipcMain.handle("load-file", (event, fileName) => {
   const window = BrowserWindow.getFocusedWindow()
 
   try {
-    window.loadFile("windows/" + fileName)
+    window.loadFile(path.join(import.meta.dirname, "windows", fileName))
   } catch (error) {
     console.error("load-file handler error: " + error);
-    
+
   }
-  
+
 })
 
 
@@ -57,6 +57,7 @@ async function updateUserTasks() {
 }
 
 app.whenReady().then(async () => {
+
   ipcMain.handle("update-user-tasks", (event) => {
     updateUserTasks();
   });

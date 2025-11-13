@@ -30,13 +30,18 @@ class DataSender {
 
         const account = JSON.parse(localStorage.getItem("account"));
 
-        const authResponse = await window.electronAPI.authPOST(account.username, account.password)
+        const isTokenValid = await window.electronAPI.authTokenPOST(account.username, account.token)
 
-        const accountInfo = await window.electronAPI.accInfoPOST(account.username, account.password)
+        if (!isTokenValid) {
+            window.location.href = "auth.html"
+            return
+        }
+
+        const accountInfo = await window.electronAPI.accInfoPOST(account.username, account.token)
 
         console.log(accountInfo)
 
-        if (authResponse.success) {
+        if (isTokenValid) {
             socket.emit("send_message", {
                 media: mediaDataURL,
                 text: text,
@@ -45,6 +50,7 @@ class DataSender {
 
             createMessage(account.username, undefined, undefined, text, true)
         } else {
+            window.location.href = "auth.html"
             return // creating error message
         }
 
@@ -56,8 +62,6 @@ class SocketListeners {
         const user = await window.electronAPI.accInfoByIdPOST(senderID)
 
         createMessage(user.username, undefined, mediaDataURL, text, false)
-
-        console.log(text)
     }
 }
 

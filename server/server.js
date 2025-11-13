@@ -1,8 +1,8 @@
 import { Server } from "socket.io";
 import http from "http";
-import express from "express"
+import express from "express";
 
-import { nanoid } from "nanoid";
+import bcrypt from "bcrypt";
 
 import fs from "fs";
 import path from "path";
@@ -12,147 +12,121 @@ config();
 
 import { fileURLToPath } from "url";
 
-const app = express()
+import authRoutes from "./routes/auth.js"
+
+// const router = express.Router()
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
+const dbPath = path.join(__dirname, "db", "db.json");
+
+const app = express();
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-app.post("/api/auth", async (req, res) => {
-
-  console.log(req.body)
-
-    try {
-      const data = req.body
-      const database = await fs.promises.readFile(
-        path.join(__dirname, "db", "db.json"),
-        "utf-8"
-      );
-      const databaseParsed = JSON.parse(database);
-
-      console.log("req data:", data);
-      console.log("db users:", databaseParsed.users);
-
-      const user = databaseParsed.users.find(
-        (u) => u.username === data.username && u.password === data.password
-      );
-
-      console.log("matched user:", user);
-
-      if (user) {
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(
-          JSON.stringify({
-            success: true,
-          })
-        );
-      } else {
-        res.writeHead(401, { "Content-Type": "application/json" });
-        res.end(
-          JSON.stringify({
-            success: false,
-          })
-        );
-      }
-    } catch (error) {
-      console.error("Auth handler error:", error);
-      res.writeHead(500, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ success: false }));
-    }
-  });
-
-app.post("/api/reg", async (req, res) => {
-    try {
-      const data = req.body
-      const database = await fs.promises.readFile(
-        path.join(__dirname, "db", "db.json"),
-        "utf-8"
-      );
-      const databaseParsed = JSON.parse(database);
-
-      console.log("req data:", data);
-      console.log("db users:", databaseParsed.users);
-
-      const user = databaseParsed.users.find(
-        (u) => u.username === data.username || u.password === data.password
-      );
-
-      if (user) {
-        console.error("database already has user with same password or login")
-        res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(
-          JSON.stringify({
-            success: false,
-          })
-        );
-      } else {
-        const newUser = {
-          username: data.username,
-          password: data.password,
-          id: nanoid()
-        }
-
-        databaseParsed.users.push(newUser)
-
-        const stringifyDB = JSON.stringify(databaseParsed, null, 2)
-
-        await fs.promises.writeFile(path.join(__dirname, "db", "db.json"), stringifyDB, 'utf8')
-
-        res.writeHead(200, { "Content-Type": "application/json" });
-        res.end(
-          JSON.stringify({
-            success: true,
-          })
-        );
-      }
-    } catch (error) {
-      console.error("Reg handler error:", error);
-      res.writeHead(500, { "Content-Type": "application/json" });
-      res.end(JSON.stringify({ success: false }));
-    }
-  });
+app.use("/media", express.static(path.join(__dirname, "..", "media")));
+app.use("/api", authRoutes)
 
 app.post("/api/acc-info", async (req, res) => {
-    const db = await fs.promises.readFile(path.join(__dirname, "db", "db.json"), 'utf-8')
+  const db = await fs.promises.readFile(dbPath, "utf-8");
 
-    const dbParsed = JSON.parse(db)
+  const dbParsed = JSON.parse(db);
 
-    const bodyParsed = req.body
+  const bodyParsed = req.body;
 
-    const user = dbParsed.users.find((u) => bodyParsed.username == u.username && bodyParsed.password == u.password)
+  const user = dbParsed.users.find((u) => bodyParsed.username === u.username);
 
-    if (user) {
-      res.writeHead(200, { "content-type": "application/json" })
-      res.end(JSON.stringify(user))
-    } else {
-      res.writeHead(500)
-      res.end(undefined)
-    }
-  })
+  const isTokenValid = await bcrypt.compare(bodyParsed.token, user.token);
+
+  if (isTokenValid) {
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(JSON.stringify(user));
+  } else {
+    res.writeHead(500);
+    res.end(undefined);
+  }
+});
 
 app.post("/api/acc-info-by-id", async (req, res) => {
-      const db = await fs.promises.readFile(path.join(__dirname, "db", "db.json"), 'utf-8')
+  const db = await fs.promises.readFile(dbPath, "utf-8");
 
-      const dbParsed = JSON.parse(db)
+  const dbParsed = JSON.parse(db);
 
-      const bodyParsed = req.body
+  const bodyParsed = req.body;
 
-      const user = dbParsed.users.find((u) => bodyParsed.id == u.id)
+  const user = dbParsed.users.find((u) => bodyParsed.id == u.id);
 
-      console.log("FINDED USER:", user)
+  // ONLY PUBLIC INFO
 
-      if (user) {
-        res.writeHead(200, { "content-type": "application/json" })
-        res.end(JSON.stringify({ username: user.username })) // maybe avatar and other acc info
-      } else {
-        res.writeHead(500)
-        res.end(undefined)
-      }
-    })
+  if (user) {
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(JSON.stringify({ username: user.username })); // maybe avatar and other acc info
+  } else {
+    res.writeHead(500);
+    res.end(undefined);
+  }
+});
 
-const server = http.createServer(app)
+app.get("/users/:slug", async (req, res) => {
+  const slug = req.params.slug;
+
+  const db = await fs.promises.readFile(dbPath, "utf-8");
+
+  const dbParsed = JSON.parse(db);
+
+  const user = dbParsed.users.find((u) => u.username == slug);
+
+  if (user) {
+    const profile = `
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${user.username} profile</title>
+</head>
+<body>
+    <div class="container">
+      <div class"header">
+        <h1>Профиль пользователя</h1>
+        <img
+          src=${user.avatar || ""}
+          alt="Аватар пользователя"
+          style={{ borderRadius: '50%', width: '150px', height: '150px', marginBottom: '1rem' }}
+        />
+        <h2>${user.username || ""}</h2>
+        <p>${user.bio || ""}</p>
+      </div>
+    </div>
+</body>
+</html>
+
+    `;
+
+    res.end(profile);
+  } else {
+    const profile = `
+    <!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  Don't have this user
+</body>
+</html>`;
+
+    res.end(profile);
+  }
+});
+
+
+
+const server = http.createServer(app);
 const io = new Server(server);
 
 const PORT = process.env.PORT || 9999;

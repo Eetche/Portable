@@ -11,8 +11,8 @@ authForm.addEventListener('submit', async (event) => {
 
     if (response.success) {
         localStorage.setItem("account", JSON.stringify({
-            "username": loginField.value,
-            "password": passwordField.value
+            token: response.token,
+            username: loginField.value
         }))
         window.location.href = "chat.html"
     } else {
