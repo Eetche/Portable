@@ -31,14 +31,19 @@ p {
     height: 100%;
     outline: none;
     font-size: 100%;
+    background-color: rgb(15,15,15);
+    color: white;
 }
 
 .sending button {
+
     cursor: pointer;
     outline: none;
     border: none;
     width: 10%;
     height: 100%;
+    background-color: rgb(15,15,15);
+    color: white;
 }
 
 .content {
@@ -48,10 +53,11 @@ p {
     flex-direction: column;
     align-items: flex-start;
     padding-left: 10px;
+    padding-bottom: 100px;
 }
 
 .content .message {
-    border: 1px solid white;
+    border: 1px solid rgb(99, 99, 99);
     padding: 10px;
     border-radius: 10px;
     color: white;

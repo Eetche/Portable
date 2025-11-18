@@ -40,7 +40,7 @@ class Window {
         });
 
         return window
-    
+
 }
 }
 

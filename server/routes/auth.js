@@ -6,6 +6,8 @@ import bcrypt from "bcrypt"
 import path from 'path'
 import { fileURLToPath } from "url";
 
+import serverConfig from "../../js/client/serverConfig.js";
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -28,6 +30,9 @@ router.post("/auth", async (req, res) => {
       const refreshedHashedToken = await bcrypt.hash(refreshedToken, 12);
 
       user.token = refreshedHashedToken;
+
+      res.cookie("token", refreshedToken)
+      res.cookie("username", data.username)
 
       await fs.promises.writeFile(
         dbPath,
@@ -76,13 +81,18 @@ router.post("/reg", async (req, res) => {
       );
     } else {
       const hashedPassword = await bcrypt.hash(data.password, 12);
-      const hashedToken = await bcrypt.hash(nanoid(14), 12);
+
+      const token = nanoid(14)
+      const hashedToken = await bcrypt.hash(token, 12);
+
+      res.cookie("token", token)
+      res.cookie("username", data.username)
 
       const newUser = {
         username: data.username,
         password: hashedPassword,
         token: hashedToken,
-        avatar: path.join(__dirname, "..", "media", ""),
+        avatar: `http://${serverConfig.hostname}:${serverConfig.port}/media/people.png`,
         id: nanoid(10),
       };
 
@@ -112,8 +122,6 @@ router.post("/auth-token", async (req, res) => {
   const dbParsed = JSON.parse(database);
 
   const user = dbParsed.users.find((u) => req.body.username === u.username);
-
-  console.log(req.body);
 
   const isTokenValid = await bcrypt.compare(req.body.token, user.token);
 

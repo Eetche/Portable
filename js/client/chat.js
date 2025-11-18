@@ -1,107 +1,144 @@
-const socket = io("http://localhost:9999")
+import serverConfig from "./serverConfig.js";
+
+const socket = io(`http://${serverConfig.hostname}:${serverConfig.port}`);
 
 window.onload = async () => {
-    if (!localStorage.getItem("account")) {
-        window.location.href = "auth.html"
-    }
-}
+  if (!localStorage.getItem("account")) {
+    window.location.href = "/auth";
+  }
+};
 
 let isConnected = false;
 
 socket.on("connect", () => {
-    isConnected = true;
-    console.log("! client connected: " + socket.id)
-
-})
+  isConnected = true;
+  console.log("! client connected: " + socket.id);
+});
 socket.on("server_broadcast_send_message", (message) => {
-    SocketListeners.getMessage(message.userID, undefined, message.text, message.media)
-})
+  SocketListeners.getMessage(
+    message.userID,
+    undefined,
+    message.text,
+    message.media
+  );
+});
 
-const button = document.querySelector("button")
-const input = document.querySelector("input")
-const content = document.querySelector(".content")
+document.cookie = "username=123"
+
+const button = document.querySelector("button");
+const input = document.querySelector("input");
+const content = document.querySelector(".content");
 
 class DataSender {
+  static async sendMessage(text, mediaDataURL) {
+    if (!text) return;
 
-    static async sendMessage(text, mediaDataURL) {
-        if (!text) return
+    input.value = "";
 
-        input.value = ""
+    const account = JSON.parse(localStorage.getItem("account"));
 
-        const account = JSON.parse(localStorage.getItem("account"));
+    createMessage(account.username, undefined, undefined, text, true);
 
-        const isTokenValid = await window.electronAPI.authTokenPOST(account.username, account.token)
+    const isTokenValid = await fetch(
+      `http://${serverConfig.hostname}:${serverConfig.port}/api/auth-token`,
+      {
+        method: "POST",
+        headers: {
+          "content-type": "application/json"
+        },
+        body: JSON.stringify({
+          username: account.username,
+          token: account.token,
+        }),
+      }
+    )
 
-        if (!isTokenValid) {
-            window.location.href = "auth.html"
-            return
-        }
-
-        const accountInfo = await window.electronAPI.accInfoPOST(account.username, account.token)
-
-        console.log(accountInfo)
-
-        if (isTokenValid) {
-            socket.emit("send_message", {
-                media: mediaDataURL,
-                text: text,
-                userID: accountInfo.id
-            })
-
-            createMessage(account.username, undefined, undefined, text, true)
-        } else {
-            window.location.href = "auth.html"
-            return // creating error message
-        }
-
+    if (!account) {
+      window.location.href = "/auth";
+      return;
     }
+
+    const accountInfo = await fetch(`http://${serverConfig.hostname}:${serverConfig.port}/api/acc-info`, {
+      method: "POST",
+      headers: {
+        "content-type": "application/json"
+      },
+      body: JSON.stringify({
+        username: account.username,
+        token: account.token
+      })
+    })
+
+    const accountInfoResponse = await accountInfo.json()
+
+    if (isTokenValid) {
+      socket.emit("send_message", {
+        media: mediaDataURL,
+        text: text,
+        userID: accountInfoResponse.id,
+      });
+    } else {
+      window.location.href = "/auth";
+      return; // creating error message
+    }
+  }
 }
 
 class SocketListeners {
-    static async getMessage(senderID, group, text, mediaDataURL) {
-        const user = await window.electronAPI.accInfoByIdPOST(senderID)
+  static async getMessage(senderID, group, text, mediaDataURL) {
+    let user = await fetch(`http://${serverConfig.hostname}:${serverConfig.port}/api/acc-info-by-id`, {
+      method: "POST",
+      headers: {"content-type": "application/json"},
+      body: JSON.stringify({
+        id: senderID
+      })
+    })
 
-        createMessage(user.username, undefined, mediaDataURL, text, false)
-    }
+    user = await user.json()
+
+    createMessage(user.username, user.avatar, mediaDataURL, text, false);
+  }
 }
 
 function createMessage(author, avatar, media, text, my) {
-    const message = document.createElement("div")
-    message.classList.add("message")
+  const message = document.createElement("div");
+  message.classList.add("message");
 
-    if (my) {
-        message.classList.add("my")
-    }
+  if (my) {
+    message.classList.add("my");
+  }
 
-    const authorUsername = document.createElement("span")
+  const authorUsername = document.createElement("span");
 
-    authorUsername.textContent = author
+  authorUsername.textContent = author;
 
+  const messageText = document.createElement("p");
+  messageText.textContent = text;
 
-    const messageText = document.createElement("p")
-    messageText.textContent = text
+  if (media) {
+    const messageMedia = document.createElement("img");
+    messageMedia.classList.add("messageMedia");
+    messageMedia.src = media;
+    message.appendChild(messageMedia);
+  }
 
-    if (media) {
-        const messageMedia = document.createElement("img")
-        messageMedia.classList.add("messageMedia")
-        messageMedia.src = media
-        message.appendChild(messageMedia)
-    }
-
-    content.appendChild(message)
-    message.appendChild(authorUsername)
-    message.appendChild(messageText)
-
+  content.appendChild(message);
+  message.appendChild(authorUsername);
+  message.appendChild(messageText);
 }
 
 window.addEventListener("keydown", (e) => {
-    if (e.key == "Enter") {
-        DataSender.sendMessage(input.value, undefined)
-    }
-})
+  if (e.key == "Enter") {
+    DataSender.sendMessage(input.value, undefined);
+  }
+});
 
-button.addEventListener('click', () => {
-    (isConnected) ? undefined : () => {return}
+button.addEventListener("click", () => {
+  isConnected
+    ? undefined
+    : () => {
+        return;
+      };
 
-    DataSender.sendMessage(input.value, undefined)
-})
+  DataSender.sendMessage(input.value, undefined);
+});

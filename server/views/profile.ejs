@@ -1,0 +1,28 @@
+    <!DOCTYPE html>
+<html lang="ru">
+<head>
+    <link rel="stylesheet" href="/static/globals.css">
+    <link rel="stylesheet" href="/static/profile.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= user.username %> profile</title>
+</head>
+<% if (user.mine == true) { %>
+  <body>
+      <div class="container">
+        <div class="profile">
+          <img
+            src=<%= user.avatar || "http://localhost:9999/media/people.png" %>
+            alt="Аватар пользователя"
+          />
+          <h2><%= user.username %></h2>
+          <img src="/media/pencil.svg" alt="pencil">
+          <p><%= user.bio %></p>
+        </div>
+      </div>
+  </body>
+<% } else { %>
+    <h1>not mine</h1>
+  <%} %>
+
+</html>

@@ -1,3 +1,5 @@
+import serverConfig from "./serverConfig.js"
+
 const webviewMenu = document.getElementById("webview")
 
 const menuContainer = document.querySelector(".menuContainer")
@@ -32,7 +34,9 @@ menuContainer.addEventListener('mouseout', () => {
 })
 
 chat.addEventListener('click', () => {
-    
 
-    window.electronAPI.loadFile("chat.html")
+
+    webviewMenu.src = `http://${serverConfig.hostname}:${serverConfig.port}/chat`
+
+    document.querySelector("#content").classList.add("active")
 })

@@ -1,0 +1,20 @@
+html, body {
+    padding: 0px;
+}
+
+* {
+    color: white;
+}
+
+.profile {
+    border: 1px solid rgb(30, 30, 30);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.profile img {
+    width: 128px;
+    height: 128px;
+}

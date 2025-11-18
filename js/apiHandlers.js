@@ -1,10 +1,15 @@
 import axios from "axios";
 import { ipcMain } from "electron";
 
+import loadConfig from "../server/configLoader.js";
+
 ipcMain.handle("auth-post", async (event, username, password) => {
+  const serverConfig = await loadConfig()
+
+
   try {
     const { data, status } = await axios.post(
-      "http://localhost:9999/api/auth",
+      `http://${serverConfig.hostname}:${serverConfig.port}/api/auth`,
       { username, password },
       { headers: { "Content-Type": "application/json" } }
     );
@@ -25,9 +30,12 @@ ipcMain.handle("auth-post", async (event, username, password) => {
 });
 
 ipcMain.handle("reg-post", async (event, username, password) => {
+
   try {
+    const serverConfig = await loadConfig()
+
     const { data, status } = await axios.post(
-      "http://localhost:9999/api/reg",
+      `http://${serverConfig.hostname}:${serverConfig.port}/api/reg`,
       { username, password },
       { headers: { "Content-Type": "application/json" } }
     );
@@ -48,9 +56,12 @@ ipcMain.handle("reg-post", async (event, username, password) => {
 });
 
 ipcMain.handle("acc-info", async (event, username, token) => {
+
+
   try {
+    const serverConfig = await loadConfig()
     const { data, status } = await axios.post(
-      "http://localhost:9999/api/acc-info",
+      `http://${serverConfig.hostname}:${serverConfig.port}/api/acc-info`,
       { username, token },
       { headers: { "Content-Type": "application/json" } }
     );
@@ -67,8 +78,9 @@ ipcMain.handle("acc-info", async (event, username, token) => {
 
 ipcMain.handle("acc-info-by-id", async (event, id) => {
   try {
+    const serverConfig = await loadConfig()
     const { data, status } = await axios.post(
-      "http://localhost:9999/api/acc-info-by-id",
+      `http://${serverConfig.hostname}:${serverConfig.port}/api/acc-info-by-id`,
       {id},
       {headers: {"Content-Type": "application/json"}})
 
@@ -83,8 +95,9 @@ ipcMain.handle("acc-info-by-id", async (event, id) => {
 
 ipcMain.handle("auth-token", async (event, username, token) => {
 try {
+  const serverConfig = await loadConfig()
     const { data, status } = await axios.post(
-      "http://localhost:9999/api/auth-token",
+      `http://${serverConfig.hostname}:${serverConfig.port}/api/auth-token`,
       {username, token},
       {headers: {"Content-Type": "application/json"}})
 

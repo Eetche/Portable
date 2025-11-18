@@ -1,6 +1,8 @@
 import fs from "fs";
-import path from "path";
+import path, { resolve } from "path";
 import { fileURLToPath } from "url";
+
+import loadConfig from "../server/configLoader.js"
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -80,4 +82,12 @@ async function getTabs() {
     }
 }
 
-export { writeTabs, writeApps, getApps, getTabs };
+async function getServerConfig() {
+  try {
+    return await loadConfig()
+  } catch (error) {
+    console.log("get-server-config handle error: " + error)
+  }
+}
+
+export { writeTabs, writeApps, getApps, getTabs, getServerConfig };

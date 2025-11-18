@@ -4,17 +4,17 @@ import express from "express";
 
 import bcrypt from "bcrypt";
 
+import cookieParser from "cookie-parser";
+
 import fs from "fs";
 import path from "path";
-
-import { config } from "dotenv";
-config();
 
 import { fileURLToPath } from "url";
 
 import authRoutes from "./routes/auth.js"
+import pagesRoutes from "./routes/pages.js"
 
-// const router = express.Router()
+import loadConfig from "./configLoader.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,9 +25,16 @@ const app = express();
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cookieParser())
+
+app.set("view engine", "ejs")
 
 app.use("/media", express.static(path.join(__dirname, "..", "media")));
+app.use("/static", express.static(path.join(__dirname, "..", "styles")))
+app.use("/static", express.static(path.join(__dirname, "..", "js", "client")))
 app.use("/api", authRoutes)
+
+app.use(pagesRoutes)
 
 app.post("/api/acc-info", async (req, res) => {
   const db = await fs.promises.readFile(dbPath, "utf-8");
@@ -78,34 +85,27 @@ app.get("/users/:slug", async (req, res) => {
 
   const user = dbParsed.users.find((u) => u.username == slug);
 
+  // checking authorization
+
+  if (!req.cookies?.token || !user.token) {
+    return;
+  }
+
+  const isTokenValid = await bcrypt.compare(req.cookies?.token, user.token)
+
+  const isMine = dbParsed.users.find((u) => u.username == slug && isTokenValid)
+
+  if (isMine) {
+    user.mine = true;
+  }
+
+
   if (user) {
-    const profile = `
-    <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>${user.username} profile</title>
-</head>
-<body>
-    <div class="container">
-      <div class"header">
-        <h1>Профиль пользователя</h1>
-        <img
-          src=${user.avatar || ""}
-          alt="Аватар пользователя"
-          style={{ borderRadius: '50%', width: '150px', height: '150px', marginBottom: '1rem' }}
-        />
-        <h2>${user.username || ""}</h2>
-        <p>${user.bio || ""}</p>
-      </div>
-    </div>
-</body>
-</html>
 
-    `;
-
-    res.end(profile);
+    res.setHeader("Content-Type", "text/html; charset=utf-8")
+    res.render("profile", {
+      user: user
+    });
   } else {
     const profile = `
     <!DOCTYPE html>
@@ -113,7 +113,7 @@ app.get("/users/:slug", async (req, res) => {
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
+  <title>404</title>
 </head>
 <body>
   Don't have this user
@@ -129,12 +129,12 @@ app.get("/users/:slug", async (req, res) => {
 const server = http.createServer(app);
 const io = new Server(server);
 
-const PORT = process.env.PORT || 9999;
-const HOSTNAME = process.env.HOSTNAME || "localhost";
+loadConfig().then((data) => {
+  server.listen(data.port, data.hostname, () => {
+    console.log(`! socket server is live on ${data.hostname}:${data.port} \n`);
+  });
+})
 
-server.listen(PORT, HOSTNAME, () => {
-  console.log(`! socket server is live on ${HOSTNAME}:${PORT} \n`);
-});
 
 io.on("connection", (socket) => {
   console.log(`! client connected: ${socket.id} \n`);
@@ -152,7 +152,7 @@ io.on("connection", (socket) => {
 
     */
 
-  socket.on("send_message", (message) => {
+  socket.on("send_message", async (message) => {
     console.log(`
     GETTING MESSAGE
 
@@ -160,6 +160,20 @@ io.on("connection", (socket) => {
     text: ${message.text},
     userID: ${message.userID}
             `);
+
+    const db = await fs.promises.readFile(dbPath, 'utf-8')
+
+    const dbParsed = JSON.parse(db)
+
+    const newMessage = {
+      media: message.media,
+      text: message.text,
+      userID: message.userID
+    }
+
+    dbParsed.messages.push(newMessage)
+
+    await fs.promises.writeFile(dbPath, JSON.stringify(dbParsed, null, 2), 'utf-8')
 
     socket.broadcast.emit("server_broadcast_send_message", message);
   });

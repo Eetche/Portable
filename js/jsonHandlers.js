@@ -1,6 +1,6 @@
 import { ipcMain } from "electron"
 
-import { writeApps, writeTabs, getApps, getTabs } from "../js/json.js"
+import { writeApps, writeTabs, getApps, getTabs, getServerConfig } from "../js/json.js"
 
 ipcMain.handle("write-tabs", (event, data) => {
 	writeTabs(data)
@@ -16,4 +16,8 @@ ipcMain.handle("write-apps", (event, data) => {
 
 ipcMain.handle("get-apps", async (event) => {
 	return getApps()
+})
+
+ipcMain.handle("get-server-config", async () => {
+	return getServerConfig()
 })
