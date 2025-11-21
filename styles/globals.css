@@ -7,6 +7,7 @@ html, body {
     overflow-x: hidden;
     padding-top: 110px;
     background-color: var(--el-bg);
+    color-scheme: dark;
 }
 
 :root {

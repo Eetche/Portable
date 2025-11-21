@@ -23,8 +23,6 @@ socket.on("server_broadcast_send_message", (message) => {
   );
 });
 
-document.cookie = "username=123"
-
 const button = document.querySelector("button");
 const input = document.querySelector("input");
 const content = document.querySelector(".content");
@@ -37,7 +35,7 @@ class DataSender {
 
     const account = JSON.parse(localStorage.getItem("account"));
 
-    createMessage(account.username, undefined, undefined, text, true);
+    createMessage(account.username, `http://${serverConfig.hostname}:${serverConfig.port}/media/people.png`, undefined, text, true);
 
     const isTokenValid = await fetch(
       `http://${serverConfig.hostname}:${serverConfig.port}/api/auth-token`,
@@ -93,8 +91,11 @@ class SocketListeners {
         id: senderID
       })
     })
+    console.log(user)
+
 
     user = await user.json()
+
 
     createMessage(user.username, user.avatar, mediaDataURL, text, false);
   }
@@ -108,9 +109,11 @@ function createMessage(author, avatar, media, text, my) {
     message.classList.add("my");
   }
 
-  const authorUsername = document.createElement("span");
+  const authorUsername = document.createElement("a");
 
   authorUsername.textContent = author;
+  authorUsername.classList.add("username")
+  authorUsername.href = `/users/${author}`
 
   const messageText = document.createElement("p");
   messageText.textContent = text;
@@ -122,8 +125,15 @@ function createMessage(author, avatar, media, text, my) {
     message.appendChild(messageMedia);
   }
 
+  const userAvatar = document.createElement("img")
+  userAvatar.classList.add("avatar")
+  userAvatar.src = avatar
+
+  message.appendChild(userAvatar)
+
   content.appendChild(message);
   message.appendChild(authorUsername);
+  message.appendChild(document.createElement("br"))
   message.appendChild(messageText);
 }
 

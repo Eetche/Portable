@@ -7,10 +7,6 @@ html, body {
     padding: 0;
 }
 
-* {
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-}
-
 p {
     color: white;
 }
@@ -65,8 +61,29 @@ p {
     margin-top: 10px;
     margin-bottom: 10px;
     word-wrap: normal;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    gap: 10px;
 }
 
 .my {
     background-color: rgb(15,15,15);
+}
+
+
+.message .avatar {
+    width: 32px;
+    height: 32px;
+}
+
+
+.message .username {
+    height: 100%;
+    color: white;
+    transition: all 0.1s;
+}
+
+.message .username:hover {
+    color: rgb(82, 137, 255);
 }

@@ -11,18 +11,44 @@
   <body>
       <div class="container">
         <div class="profile">
+          <div class="avatar">
+            <img
+              src=<%= user.avatar || "http://localhost:9999/media/people.png" %>
+              alt="Аватар пользователя"
+            />
+            <span class="bio"><%= user.bio || "" %></span>
+          </div>
+          <h2 class="username"><%= user.username %>
+          </h2>
+          <div class="dataChange">
+   <img src="/media/settings.svg" alt="settings">
+ </div>
+        </div>
+      </div>
+      <div class="settings">
+        <img src="/media/close.svg" alt="close" class="closeSettings">
+
+        <div class="options">
+          <button class="option">Account</button>
+      </div>
+        <div class="values">
+          <div class="accountValues"></div>
+        </div>
+      </div>
+  </body>
+  <script src="/static/profile.js"></script>
+<% } else { %>
+  <body>
+      <div class="container">
+        <div class="profile">
           <img
             src=<%= user.avatar || "http://localhost:9999/media/people.png" %>
             alt="Аватар пользователя"
           />
           <h2><%= user.username %></h2>
-          <img src="/media/pencil.svg" alt="pencil">
           <p><%= user.bio %></p>
         </div>
       </div>
   </body>
-<% } else { %>
-    <h1>not mine</h1>
   <%} %>
-
 </html>

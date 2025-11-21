@@ -6,15 +6,120 @@ html, body {
     color: white;
 }
 
-.profile {
-    border: 1px solid rgb(30, 30, 30);
+.container {
     display: flex;
     justify-content: center;
     align-items: center;
-    flex-direction: column;
+}
+
+.profile {
+    width: 100%;
+    border: 1px solid rgb(30, 30, 30);
+    display: flex;
+    flex-direction: row;
+    padding: 50px;
+    position: relative;
+    justify-content: space-around;
 }
 
 .profile img {
-    width: 128px;
-    height: 128px;
+    width: 164px;
+    height: 164px;
+}
+
+.profile .dataChange {
+    cursor: pointer;
+    position: absolute;
+    right: 10px;
+    bottom: 10px;
+    width: 32px;
+    height: 32px;
+    opacity: 0.7;
+    transition: all 0.5s;
+}
+
+.profile .dataChange:hover {
+    transform: rotate(145deg);
+    opacity: 1;
+}
+
+.profile .dataChange img {
+    width: 100%;
+    height: 100%;
+}
+
+.profile .bio {
+    font-size: 1.1rem;
+    font-weight: 100;
+    color: rgb(100, 100, 100);
+}
+
+.profile .username {
+    max-width: 164px;
+    max-height: 164px;
+    padding: 30px;
+    background-color: white;
+    color: black;
+    font-weight: 900;
+    height: 100%;
+}
+
+.profile .avatar {
+    display: flex;
+    flex-direction: column;
+}
+
+.bio {
+    text-align: center;
+    max-width: 164px;
+    word-wrap: break-word;
+}
+
+
+.settings {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 70%;
+    height: 60%;
+    background-color: rgba(0,0,0, 0.7);
+    transition: all 0.5s;
+    display: none;
+}
+
+
+.closeSettings {
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+    width: 32px;
+    height: 32px;
+    transition: all 0.2s;
+    opacity: 0.7;
+}
+
+.closeSettings:hover {
+    opacity: 1;
+}
+
+
+.options {
+    left: 0px;
+    width: 100px;
+    height: 100%;
+    border: 1px solid rgb(100, 100, 100);
+}
+
+.options .option {
+    width: 100%;
+    background-color: black;
+    cursor: pointer;
+    text-align: center;
+    padding: 5px;
+    outline: none;
+    border: none;
+    border-bottom: 1px solid rgb(100,100,100);
+    font-size: 100%;
 }
