@@ -11,7 +11,7 @@ import path from "path";
 
 import { fileURLToPath } from "url";
 
-import authRoutes from "./routes/auth.js";
+import apiRoutes from "./routes/api.js";
 import pagesRoutes from "./routes/pages.js";
 
 import serverConfig from "../js/client/serverConfig.js";
@@ -32,7 +32,8 @@ app.set("view engine", "ejs");
 app.use("/media", express.static(path.join(__dirname, "..", "media")));
 app.use("/static", express.static(path.join(__dirname, "..", "styles")));
 app.use("/static", express.static(path.join(__dirname, "..", "js", "client")));
-app.use("/api", authRoutes);
+app.use("/static", express.static(path.join(__dirname, "uploads")))
+app.use("/api", apiRoutes);
 
 app.use(pagesRoutes);
 

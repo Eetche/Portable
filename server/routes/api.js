@@ -123,6 +123,11 @@ router.post("/auth-token", async (req, res) => {
 
   const user = dbParsed.users.find((u) => req.body.username === u.username);
 
+  if (!user) {
+    res.writeHead(500, {"content-type": "application/json"})
+    res.end("unknown user")
+  }
+
   const isTokenValid = await bcrypt.compare(req.body.token, user.token);
 
   if (isTokenValid) {
@@ -141,5 +146,77 @@ router.post("/auth-token", async (req, res) => {
     );
   }
 });
+
+router.post("/change-account-data", async (req, res) => {
+  console.log(req.body)
+
+  if (!req.body.token || !req.body.username) {
+    res.end("have no required data")
+  }
+
+  const database = await fs.promises.readFile(dbPath, 'utf-8');
+  const dbParsed = JSON.parse(database)
+
+  /* MUST BE FILLED
+
+  token, required
+  username, required
+  newUsername,
+  newPassword,
+  newBio,
+  newAvatar
+
+  */
+
+  const user = dbParsed.users.find((u) => decodeURI(req.body.username) === decodeURI(u.username))
+
+  if (!user) {
+    console.log("change-account-data: don't have user")
+    return
+  }
+
+  const isTokenValid = await bcrypt.compare(req.body.token, user.token)
+
+  if (!isTokenValid) {
+    res.end("invalid token")
+  }
+
+  user.username = req.body.newUsername || "<blank>";
+  user.password = req.body.newPassword || user.password;
+  user.bio = req.body.newBio;
+  user.avatar = req.body.newAvatar || "/media/people.png"
+
+  await fs.promises.writeFile(dbPath, JSON.stringify(dbParsed, null , 2), 'utf-8')
+
+  res.writeHead(200, {"content-type": "application/json"})
+  res.end(JSON.stringify({
+    success: true
+  }))
+
+})
+
+router.post("/upload-avatar", async (req, res) => {
+  try {  
+      const file = req.body.avatar
+    
+      const buffer = await file.arrayBuffer()
+    
+      const bytes = new Uint8Array(buffer)
+    
+      const filePath = path.join(__dirname, "..", "uploads", file.name)
+    
+      await fs.promises.writeFile(filePath, Buffer.from(bytes))
+
+      res.writeHead(200, "application/json")
+      res.end(JSON.stringify({
+        success: true
+      }))
+  } catch (error) {
+      res.writeHead(500, "application/json")
+      res.end(JSON.stringify({
+        success: false
+      }))
+  }
+})
 
 export default router

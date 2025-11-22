@@ -1,11 +1,12 @@
     <!DOCTYPE html>
 <html lang="ru">
 <head>
+  <link rel="icon" href="/media/icon.ico">
     <link rel="stylesheet" href="/static/globals.css">
     <link rel="stylesheet" href="/static/profile.css">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= user.username %> profile</title>
+  <title><%= user.username %></title>
 </head>
 <% if (user.mine == true) { %>
   <body>
@@ -29,10 +30,16 @@
         <img src="/media/close.svg" alt="close" class="closeSettings">
 
         <div class="options">
-          <button class="option">Account</button>
+          <button class="option account">Account</button>
       </div>
         <div class="values">
-          <div class="accountValues"></div>
+          <div class="accountValues valuesContainer">
+            <h3>Имя пользователя</h3>
+            <input type="text" class="value" id="usernameValue" value=<%= user.username %> >
+            <h3>Аватар</h3>
+            <input type="file" class="value" id="avatarValue">
+          </div>
+          <button class="confirmButton">Подтвердить</button>
         </div>
       </div>
   </body>
