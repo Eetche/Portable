@@ -16,8 +16,6 @@ contextBridge.exposeInMainWorld("electronAPI", {
     writeApps: (data) => ipcRenderer.invoke("write-apps", data),
     getApps: () => ipcRenderer.invoke("get-apps"),
 
-    getServerConfig: () => ipcRenderer.invoke("get-server-config"),
-
     updateUserTasks: () => ipcRenderer.invoke("update-user-tasks"),
 
     openSettings: () => ipcRenderer.invoke("open-settings"),

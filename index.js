@@ -9,7 +9,6 @@ import "./js/fsHandlers.js";
 import "./js/jsonHandlers.js";
 import "./js/websitesHandlers.js";
 import "./js/cookiesHandlers.js";
-import "./js/apiHandlers.js"
 
 import { getApps } from "./js/json.js";
 

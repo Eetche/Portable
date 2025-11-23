@@ -6,10 +6,25 @@ import bcrypt from "bcrypt"
 import path from 'path'
 import { fileURLToPath } from "url";
 
+import multer from "multer";
+
+
 import serverConfig from "../../js/client/serverConfig.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, path.join(__dirname, "..", "uploads"))
+  },
+
+  filename: (req, file, cb) => {
+    cb(null, file.originalname)
+  }
+})
+
+const upload = multer({storage: storage})
 
 const dbPath = path.join(__dirname, "..", "db", "db.json");
 
@@ -147,8 +162,7 @@ router.post("/auth-token", async (req, res) => {
   }
 });
 
-router.post("/change-account-data", async (req, res) => {
-  console.log(req.body)
+router.post("/change-account-data", upload.single("newAvatar"), async (req, res) => {
 
   if (!req.body.token || !req.body.username) {
     res.end("have no required data")
@@ -156,6 +170,8 @@ router.post("/change-account-data", async (req, res) => {
 
   const database = await fs.promises.readFile(dbPath, 'utf-8');
   const dbParsed = JSON.parse(database)
+
+
 
   /* MUST BE FILLED
 
@@ -181,10 +197,27 @@ router.post("/change-account-data", async (req, res) => {
     res.end("invalid token")
   }
 
+  if (req.body.newUsername && user.avatar != `http://${serverConfig.hostname}:${serverConfig.port}/media/people.png`) {
+    // rename avatar image file when username is changed
+
+
+    const oldAvatar = user.avatar.slice(8) // getting file name
+
+
+    const oldAvatarPath = path.join(__dirname, "..", "uploads", oldAvatar)
+    const newAvatarPath = path.join(__dirname, "..", "uploads", `${req.body.newUsername}.jpg`)
+
+    await fs.promises.rename(oldAvatarPath, newAvatarPath)
+    user.avatar = `/static/${req.body.newUsername}.jpg`
+  }
+
   user.username = req.body.newUsername || "<blank>";
   user.password = req.body.newPassword || user.password;
   user.bio = req.body.newBio;
-  user.avatar = req.body.newAvatar || "/media/people.png"
+
+  if (req.file) {
+    user.avatar = `/static/${req.file.originalname}`
+  }
 
   await fs.promises.writeFile(dbPath, JSON.stringify(dbParsed, null , 2), 'utf-8')
 
@@ -193,30 +226,6 @@ router.post("/change-account-data", async (req, res) => {
     success: true
   }))
 
-})
-
-router.post("/upload-avatar", async (req, res) => {
-  try {  
-      const file = req.body.avatar
-    
-      const buffer = await file.arrayBuffer()
-    
-      const bytes = new Uint8Array(buffer)
-    
-      const filePath = path.join(__dirname, "..", "uploads", file.name)
-    
-      await fs.promises.writeFile(filePath, Buffer.from(bytes))
-
-      res.writeHead(200, "application/json")
-      res.end(JSON.stringify({
-        success: true
-      }))
-  } catch (error) {
-      res.writeHead(500, "application/json")
-      res.end(JSON.stringify({
-        success: false
-      }))
-  }
 })
 
 export default router

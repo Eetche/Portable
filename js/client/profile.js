@@ -51,22 +51,29 @@ function setOptionsListeners() {
 }
 
 confirmSettings.addEventListener("click", async () => {
+    const localStorageAccount = JSON.parse(localStorage.getItem("account"))
+
     let newUsername, newPassword, newBio, newAvatar;
+
+    newUsername = localStorageAccount.username;
+
+
+    const formData = new FormData()
+
+    formData.append("username", localStorageAccount.username)
+    formData.append("token", localStorageAccount.token)
 
     allValues.forEach((input) => {
         switch (input.id) {
             case "usernameValue":
                 newUsername = document.getElementById("usernameValue").value
+                formData.append("newUsername", newUsername)
                 break;
 
             case "avatarValue":
                 const avatar = document.getElementById("avatarValue").files[0]
                 if (avatar) {
-                    const reader = new FileReader()
-                    reader.onload = (e) => {
-                        newAvatar = e.target.result
-                    }
-                    reader.readAsDataURL(avatar)
+                    formData.append("newAvatar", avatar, `${newUsername}.jpg`)
                 }
 
             default:
@@ -74,20 +81,10 @@ confirmSettings.addEventListener("click", async () => {
         }
     })
 
-    const localStorageAccount = JSON.parse(localStorage.getItem("account"))
 
     let changeAccountReq = await fetch("/api/change-account-data", {
         method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({
-            username: localStorageAccount.username,
-            token: localStorageAccount.token,
-
-            newUsername: newUsername || "<blank>",
-            newPassword: newPassword,
-            newBio: newBio,
-            newAvatar: newAvatar || "/media/people.png"
-        })
+        body: formData
     })
 
     changeAccountReq = await changeAccountReq.json()
@@ -100,6 +97,8 @@ confirmSettings.addEventListener("click", async () => {
         }))
     
         document.cookie = `username=${newUsername}`
+
+        window.location.href = `/users/${newUsername}`
 
     } else {
         console.log("change acccount request is not success")
